@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const userModel = require(`../model/userModel`)
+const userModel = require(`../model/UserModel`)
 
 const authorize = async (req, res, next) => {
     try {
@@ -28,7 +28,7 @@ const authorize = async (req, res, next) => {
                 message: 'Authentication Failed: User not found'
             });
         }
-        if(!user.isTeacher){
+        if(!user.isAdmin){
             return res.status(403).json({
                 message:`Authentication failed: User is not allowed to access this route.`
             })
@@ -63,8 +63,24 @@ const isAdmin = async (req, res, next) => {
       });
     }
   };
+
+  const isFarmer = async (req, res, next) => {
+    try {
+      if (req.user.isAdmin) {
+        next();
+      } else {
+        res.status(403).json({ message: "Unauthorized: Not an admin" });
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  };
+  
   
   module.exports = {
     authorize,
     isAdmin,
+    isFarmer
   };

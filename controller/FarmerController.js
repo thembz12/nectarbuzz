@@ -1,25 +1,23 @@
 const bcrypt = require(`bcrypt`)
 const jwt = require(`jsonwebtoken`)
-const UserModel = require("../model/UserModel.js");
+const FarmerModel = require(`../model/FarmerModel.js`)
 const cloudinary = require(`../config/cloudinary.js`)
 const sendMail = require(`../helpers/email.js`);
 const {
-    signUpTemplate,
     verifyTemplate,
     forgotPasswordTemplate,
-    changePasswordTemplate
+    signUpTemplate,
 } = require(`../helpers/html.js`);
-const FarmerModel = require("../model/FarmerModel.js");
 
-
-const signUp = async (req, res) => {
+const farmerSignUp = async (req, res) => {
+    
     try {
-         const {firstName, lastName, email, password, sex, address, phoneNumber} = req.body;
-         if(!firstName || !lastName || !email || !password || !sex || !address || !phoneNumber ){
+        const { firstName,lastName, businessLicenseNo, email, password, address, phoneNumber} = req.body;
+        if(!firstName ||!lastName || !businessLicenseNo || !email || !password || !phoneNumber || !address ){
             return res.status(400).json(`Please enter all fields.`)
         }
-        
-        const emailExist = await UserModel.findOne({ email });
+       
+        const emailExist = await FarmerModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json(`User with email already exist.`);
         } else {
@@ -28,34 +26,34 @@ const signUp = async (req, res) => {
             //perform an encrytion of the salted password
             const hashedPassword = await bcrypt.hash(password, saltedPassword);
             // create object of the body
-            const user = new UserModel({
+            const user = new FarmerModel({
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
-                email:email.toLowerCase(),
+                email: email.toLowerCase(),
                 password: hashedPassword,
-                sex:sex.trim(),
-                phoneNumber: phoneNumber,
-                address: address.trim()
+                address: address.trim(),
+                businessLicenseNo,
+                phoneNumber
             });
 
             const userToken = jwt.sign(
                 { id: user._id, email: user.email },
-                process.env.JWT_SECRET,
+                process.env.jwt_secret,
                 { expiresIn: "20 Minutes" }
             );
             const verifyLink = `${req.protocol}://${req.get(
                 "host"
             )}/api/v1/verify/${userToken}`;
-            
-    
+
             await user.save();
             await sendMail({
                 subject: `Kindly Verify your mail`,
                 email: user.email,
                 html: signUpTemplate(verifyLink, user.firstName),
             });
+
             const motivationalQuotes = [
-                "Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
+                "Welcome! Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
                 "Success is not final; failure is not fatal: It is the courage to continue that counts. Let's achieve greatness together!",
                 "The future belongs to those who believe in the beauty of their dreams. Thank you for believing in yours with us!",
                 "You’re capable of amazing things. We’re thrilled to be a part of your journey!",
@@ -69,10 +67,11 @@ const signUp = async (req, res) => {
                 data: user,
             });
         }
-    }  catch (error){
+
+    } catch (error){
         if (error.code === 11000) {
             const whatWentWrong = Object.keys(error.keyValue)[0];
-            return res.status(500).json({ message: `A user with this ${whatWentWrong} already exists. Please check your phoneNumber or email,either of them already exist.` });
+            return res.status(500).json({ message: `A user with this ${whatWentWrong} exist. Please check your phoneNumber or email,either of them already exist.` });
           }else{
             res.status(500).json({
                 message: 'An error occurred while processing your request.',
@@ -81,6 +80,7 @@ const signUp = async (req, res) => {
           }
      }}
 
+
 const verifyEmail = async (req, res) => {
     try {
         // Extract the token from the request params
@@ -88,7 +88,7 @@ const verifyEmail = async (req, res) => {
         // Extract the email from the verified token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
         // Find the user with the email
-        const user = await UserModel.findOne({ email });
+        const user = await FarmerModel.findOne({ email });
         // Check if the user is still in the database
         if (!user) {
             return res.status(404).json({
@@ -122,7 +122,7 @@ const verifyEmail = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const existingUser = await UserModel.findOne({
+        const existingUser = await FarmerModel.findOne({
             email
         });
         if (!existingUser) {
@@ -165,7 +165,7 @@ const resendVerificationEmail = async (req, res) => {
     try {
         const { email } = req.body;
         // Find the user with the email
-        const user = await UserModel.findOne({ email });
+        const user = await FarmerModel.findOne({ email });
         // Check if the user is still in the database
         if (!user) {
             return res.status(404).json({
@@ -210,7 +210,7 @@ const forgotPassword = async (req, res) => {
         const { email } = req.body;
 
         // Check if the email exists in the database
-        const user = await UserModel.findOne({ email });
+        const user = await FarmerModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
@@ -253,7 +253,7 @@ const resetPassword = async (req, res) => {
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
 
         // Find the user by ID
-        const user = await UserModel.findOne({ email });
+        const user = await FarmerModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found",
@@ -288,7 +288,7 @@ const changePassword = async (req, res) => {
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
 
         // Find the user by ID
-        const user = await UserModel.findOne({ email });
+        const user = await FarmerModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found.",
@@ -312,20 +312,6 @@ const changePassword = async (req, res) => {
 
         // Update the user's password
         user.password = hashedPassword;
-
-        const resetLink = `${req.protocol}://${req.get(
-            "host"
-        )}/api/v1/user/change-password/${resetToken}`;
-
-        // Send reset password email
-        const mailOptions = {
-            email: user.email,
-            subject: "Password Chnaged Successfully",
-            html: changePasswordTemplate(user.firstName),
-        };
-        //   Send the email
-        await sendMail(mailOptions);
-
         // Save the changes to the database
         await user.save();
         //   Send a success response
@@ -339,54 +325,12 @@ const changePassword = async (req, res) => {
     }
 };
 
-const makeAdmin = async(req, res)=> {
-    try {
-        const {userID} = req.params
-        const user = await UserModel.findById(userID)
-        if(!user){
-            return res.status(404).json(`User with ID ${userID} was not found`)
-        }
-        user.isAdmin = true
-        await user.save()
-        res.status(200).json({message: `Dear ${user.firstName}, you're now an admin`, data: user})
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
-
-const getAll = async(req,res)=>{
-    try {
-     const users = await UserModel.find()
-     if(users.length <= 0){
-        return res.status(404).json(`No available users`)
-     }else{
-        res.status(200).json({message:`Kindly find the ${users.length} registered users & students below`, data: users})
-     }
-        
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
-
-const getAllFarmers = async(req,res)=>{
-    try {
-     const users = await FarmerModel.find()
-     if(users.length <= 0){
-        return res.status(404).json(`No available users`)
-     }else{
-        res.status(200).json({message:`Kindly find the ${users.length} registered users & students below`, data: users})
-     }
-        
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
 
 const getOne = async (req, res) => {
     try {
-        const {userID} = req.params
+        const {farmerID} = req.params
 
-        const user = await UserModel.findOne({userID})
+        const user = await FarmerModel.findOne({farmerID})
         if(!user){
             return res.status(404).json(`User not found.`)
         }
@@ -399,49 +343,6 @@ const getOne = async (req, res) => {
     }
 }
 
-const getOneFarmer = async (req, res) => {
-    try {
-        const {farmerID} = req.params
-
-        const user = await FarmerModel.findOne({farmerID})
-        if(!user){
-            return res.status(404).json(`User not found.`)
-        }
-        res.status(200).json({
-            message: `Dear ${user.fullName}, kindly find your information below:`,
-            data: user
-        })
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
-const deleteUser = async (req, res) =>{
-    try {
-        const {userID} = req.params
-        const user = await UserModel.findById(userID)
-        if(!user){
-            return res.status(404).json(`User not found.`)
-        }
-        const deleteUser = await UserModel.findByIdAndDelete(userID)
-        res.status(200).json(`User deleted successfully.`)
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
-
-const deleteFarmer = async (req, res) =>{
-    try {
-        const {userID} = req.params
-        const user = await UserModel.findById(userID)
-        if(!user){
-            return res.status(404).json(`User not found.`)
-        }
-        const deleteUser = await FarmerModel.findByIdAndDelete(userID)
-        res.status(200).json(`User deleted successfully.`)
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
 const logOut = async (req, res) => {
     try {
         const auth = req.headers.authorization;
@@ -455,7 +356,7 @@ const logOut = async (req, res) => {
         // Verify the user's token and extract the user's email from the token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
         // Find the user by ID
-        const user = await UserModel.findOne({ email });
+        const user = await CustomerModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
@@ -475,46 +376,8 @@ const logOut = async (req, res) => {
     }
 }
 
-const updateUser = async (req, res) => {
+const updatePicture = async (req, res) => {
     try {
-      const userID = req.params.userID;
-      const { firstName, lastName, phoneNumber, address} = req.body;
-      const data = await UserModel.findById(userID)
-      if(!data){
-        return res.status(404).json({message:`user not found`})
-      }
-        data.firstName = firstName || data.firstName,
-        data.lastName = lastName || data.lastName,
-        data.phoneNumber = phoneNumber || data.phoneNumber,
-        data.address = address || data.address
-
-        await data.save()
-  
-      // Check if a file is uploaded
-      if (req.file) {
-        const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "user_dp" });
-  
-        data.profilePicture = {
-          pictureUrl: cloudProfile.secure_url
-        };
-      }
-  
-      const updatedUser = await UserModel.findByIdAndUpdate(userID, data, { new: true });
-  
-      if (!updatedUser) {
-        return res.status(404).json({ message: `User with ID:${userID} not found. `});
-      }
-  
-      res.status(200).json({
-        message: `User with ID:${userID} was updated successfully.`,
-         data:updatedUser
-      });
-    } catch (error) {
-      res.status(500).json({ message: error.message });}
-  };
-
-  const updatePicture = async (req, res) => {
-    try { 
       // Extract token from headers
       const token = req.headers.authorization.split(" ")[1];
   
@@ -531,16 +394,10 @@ const updateUser = async (req, res) => {
           const userID = decodedUser.id;
   
           // Find user to get the current profile picture
-          const user = await UserModel.findById(userID);
+          const user = await FarmerModel.findById(userID);
           if (!user) {
             return res.status(404).json({ message: "User not found" });
           }
-  
-          // Save the current profile picture details
-          const formerImage = {
-            pictureId: user.profilePicture.pictureId,
-            pictureUrl: user.profilePicture.pictureUrl
-          };
   
           // Upload new profile picture to Cloudinary
           const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "users_dp" });
@@ -548,18 +405,16 @@ const updateUser = async (req, res) => {
           // Prepare update data
           const pictureUpdate = {
             profilePicture: {
-              pictureId: cloudProfile.public_id,
-              pictureUrl: cloudProfile.secure_url,
-              formerImages: [...user.profilePicture.formerImages, formerImage] // Save old picture details
+              pictureUrl: cloudProfile.secure_url
             }
           };
   
           // Update user profile picture
-          const updatedUser = await UserModel.findByIdAndUpdate(userID, pictureUpdate, { new: true });
+          const updatedUser = await FarmerModel.findByIdAndUpdate(userID, pictureUpdate, { new: true });
   
           // Return success response
           return res.status(200).json({
-            message: "User image successfully changed",
+            message: "User image uploaded successfully",
             data: updatedUser.profilePicture
           });
         }
@@ -572,4 +427,47 @@ const updateUser = async (req, res) => {
     }
   };
 
-module.exports = {signUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword, changePassword, makeAdmin, getAll, getOne, updateUser, updatePicture, deleteUser, deleteFarmer, getAllFarmers, getOneFarmer, logOut}
+  const updateUser = async (req, res) => {
+    try {
+      const userID = req.params.userID;
+      const { firstName, lastName, phoneNumber, address } = req.body;
+      const data = await FarmerModel.findById(userID)
+      if(!data){
+        return res.status(404).json({message:`user not found`})
+      }
+
+      
+       
+        data.firstName = firstName || data.firstName,
+        data.lastName = lastName || data.lastName,
+        data.phoneNumber = phoneNumber || data.phoneNumber,
+        data.address = address || data.address
+
+        await data.save()
+  
+      // Check if a file is uploaded
+      if (req.file) {
+        const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "user_dp" });
+  
+        data.profilePicture = {
+          pictureUrl: cloudProfile.secure_url
+        };
+      }
+  
+      const updatedUser = await FarmerModel.findByIdAndUpdate(userID, data, { new: true });
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: `User with ID:${userID} not found. `});
+      }
+  
+      res.status(200).json({
+        message: `User with ID:${userID} was updated successfully.`,
+         data:updatedUser
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });}
+  };
+
+
+
+module.exports = {farmerSignUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword,updateUser,updatePicture, changePassword, getOne, logOut}

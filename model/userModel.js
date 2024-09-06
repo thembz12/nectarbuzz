@@ -14,9 +14,17 @@ const userSchema = new mongoose.Schema(
           return capitalize;},required:[true,'Kindly enter your last name'],
           required:true
     },
-    age:{
-        type:Number,
-        required:true 
+    phoneNumber:{
+      type:Number,
+      require:true,
+      unique:true,
+      trim:true,
+    },
+    address:{type:String,set: (entry) => {
+      const capitalize =
+      entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
+        return capitalize;},required:[true,'Kindly enter your address'],
+        required:true
     },
     sex:{type:String,
       set: (entry) => {
@@ -24,7 +32,7 @@ const userSchema = new mongoose.Schema(
         entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
           return capitalize;},
         enum: ["Male", "Female"],
-        required: true
+        required:true
     },
     email: {
       type: String,
@@ -43,13 +51,16 @@ const userSchema = new mongoose.Schema(
         type: Boolean,
         default: false 
     },
-    profilePicture:{
-        type:String
+    profilePicture: {
+      pictureUrl: { type: String},
+    },
+    cashBack: {
+      type: Number,
     },
     blackList:[]
   },
   { timestamps: true }
 );
 
-const userModel = mongoose.model("user", userSchema);
-module.exports = userModel;
+const UserModel = mongoose.model("user", userSchema);
+module.exports = UserModel;

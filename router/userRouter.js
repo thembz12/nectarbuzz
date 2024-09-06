@@ -1,18 +1,21 @@
-const express = require(`express`)
-const passport = require ("passport")
-const upload = require("../utils/multer")
-const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, createInfoWithReturnInfo } = require("../controller/userController")
+
+const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, updateUser, updatePicture, getOneFarmer, getAllFarmers, deleteFarmer,} = require("../controller/userController")
 const { authorize, isAdmin } = require("../middleware/authentication")
+const express = require(`express`)
+const upload = require("../utils/multer")
+const { singUpVlidator, logInValidator } = require("../middleware/validator")
 const router = express.Router()
 
 
-router.post(`/user-signup`, upload.single('profilePicture'), signUp)
+router.post(`/user-signup`,singUpVlidator, signUp)
 
-router.post(`/log-in`, loginUser)
+router.post(`/log-in`,logInValidator, loginUser)
 
 router.get(`/verify/:token`, verifyEmail)
 
 router.post(`/resend-verification`, resendVerificationEmail)
+
+router.put(`/update-user/:userID`, upload.single('profilePicture'), updateUser)
 
 router.post(`/forgot-password`, forgotPassword)
 
@@ -20,24 +23,23 @@ router.post(`/change-password/:token`, changePassword)
 
 router.post(`/reset-password/:token`, resetPassword)
 
-router.get(`/getone/:studentID`, authorize, getOne)
+router.post(`/update-profilepicture/:token`, updatePicture)
 
-router.get(`/getall`, authorize, getAll)
+router.get(`/getone/:userID`,authorize, getOne)
 
-router.get(`/make-admin/:userId`, isAdmin, makeAdmin)
+router.get(`/getonefarmer/:farmerID`,authorize, getOneFarmer)
 
-router.delete(`/delete-user/:userId`, isAdmin, deleteUser)
+router.get(`/getallfarmers/`,authorize, getAllFarmers)
+
+router.get(`/getall/:userID`,authorize, getAll)
+
+router.post(`/make-admin/:userID`, isAdmin, makeAdmin)
+
+router.delete(`/delete-user/:userID`, isAdmin, deleteUser)
+
+router.delete(`/delete-farmer/:userID`, isAdmin, deleteFarmer)
 
 router.post(`/log-out`, logOut)
 
-router.get("/google/callback",passport.authenticate('google',{
-    successRedirect:"/api/v1/success/signup",
-    failedRedirect:"/homepage",
-}),)
-
-router.get('/signupwithgoogle',
-    passport.authenticate('google', { scope: ['email','profile'] }));
-
-router.get("/success/signup",createInfoWithReturnInfo)
 
 module.exports = router
