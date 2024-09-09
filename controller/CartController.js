@@ -55,7 +55,7 @@ exports.updateCart = async (req, res) => {
     const { productID, quantity } = req.body;
 
     try {
-        const cart = await CartModel.findOne({ buyer: buyerID });
+        const cart = await CartModel.findOne({ buyer: userID });
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
@@ -96,9 +96,9 @@ exports.removeFromCart = async (req, res) => {
 
 // Clear cart
 exports.clearCart = async (req, res) => {
-    const userID = req.user.userID;
-
+    
     try {
+        const userID = req.user.userID;
         const cart = await CartModel.findOne({ user: userID });
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });

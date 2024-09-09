@@ -10,7 +10,7 @@ app.use(express.json())
 app.use('/uploads', express.static('uploads'))
 app.use("/api/v1",router)
 app.use("/api/v1",FarmerRouter)
-//app.use("/api/v1",ProductRouter)
+app.use("/api/v1",ProductRouter)
 
 
 
@@ -18,7 +18,7 @@ app.use("/api/v1",FarmerRouter)
 
 app.get("/", (req,res)=>{
     res.status(200).json({
-        message:"WELCOME TO ECOHARVEST"
+        message:"WELCOME TO NECTAR-BUZZ"
     })
 })
 
