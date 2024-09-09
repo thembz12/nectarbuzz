@@ -1,7 +1,7 @@
 const express = require ("express")
 require ("./config/databaseConfig.js")
 const ProductRouter = require ("./router/ProductRouter.js")
-const router = require ("./router/userRouter.js")
+const router = require ("./router/UserRouter.js")
 const FarmerRouter = require ("./router/FarmerRouter.js")
 const app = express()
 app.use(express.json())
