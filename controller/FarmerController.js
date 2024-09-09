@@ -376,7 +376,7 @@ const logOut = async (req, res) => {
     }
 }
 
-const updatePicture = async (req, res) => {
+const uploadDP = async (req, res) => {
     try {
       // Extract token from headers
       const token = req.headers.authorization.split(" ")[1];
@@ -470,4 +470,4 @@ const updatePicture = async (req, res) => {
 
 
 
-module.exports = {farmerSignUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword,updateUser,updatePicture, changePassword, getOne, logOut}
+module.exports = {farmerSignUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword,updateUser,uploadDP, changePassword, getOne, logOut}

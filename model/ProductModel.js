@@ -2,11 +2,7 @@
 const mongoose = require ("mongoose")
 
 const ProductSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Farmers',
-        required: true
-      },
+    
     honeyName:{
     type:String
     },
@@ -18,6 +14,11 @@ const ProductSchema = new mongoose.Schema({
     },
     productPicture: {
       pictureUrl: { type: String},
+    },
+    farmer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Farmers',
+      required: true
     },
 })
 const ProductModel = mongoose.model("Products", ProductSchema)

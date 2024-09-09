@@ -1,5 +1,5 @@
 
-const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, logOut, farmerSignUp, updatePicture, updateUser} = require("../controller/FarmerController")
+const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, logOut, farmerSignUp, updatePicture, updateUser, uploadDP} = require("../controller/FarmerController")
 const { authorize, isAdmin } = require("../middleware/authentication")
 const express = require(`express`)
 const upload = require("../utils/multer")
@@ -23,7 +23,7 @@ router.post(`/change-password/:token`, changePassword)
 
 router.post(`/reset-password/:token`, resetPassword)
 
-router.post(`/update-profilepicture/:token`, updatePicture)
+router.post(`/update-profilepicture/:token`, uploadDP)
 
 router.post(`/log-out`, logOut)
 

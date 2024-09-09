@@ -1,4 +1,3 @@
-
 const mongoose = require(`mongoose`)
 const customerSchema = new mongoose.Schema({
     firstName:{type:String,set: (entry) => {
@@ -44,6 +43,11 @@ const customerSchema = new mongoose.Schema({
     type: Boolean, 
     default: true 
 },
+  product:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Product"
+  }],
+  blackList:[]
 },{timestamps:true})
 
 const FarmerModel = mongoose.model(`Farmers`,customerSchema)

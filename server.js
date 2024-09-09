@@ -10,7 +10,7 @@ app.use(express.json())
 app.use('/uploads', express.static('uploads'))
 app.use("/api/v1",router)
 app.use("/api/v1",FarmerRouter)
-app.use("/api/v1",ProductRouter)
+//app.use("/api/v1",ProductRouter)
 
 
 

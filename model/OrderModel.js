@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-  items: [{ 
+  user: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Users', 
     required: true 
@@ -22,6 +22,10 @@ const OrderSchema = new mongoose.Schema({
     type: Number, 
     default: 0 
   },
+  isPaid: { 
+    type: Boolean, 
+    default: false 
+},
   orderDate: { 
     type: Date, 
     default: Date.now()

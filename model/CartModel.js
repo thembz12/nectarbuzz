@@ -8,14 +8,12 @@ const cartSchema = new schema.mongoose({
         ref: 'Users',
         required: true
     },
-    user: {
-      
+    items: [{
+      product:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
       required: true
   },
-
-    product:[{
         quantity: {
             type: Number,
             required: true,
@@ -38,8 +36,12 @@ const cartSchema = new schema.mongoose({
             required: true
           }
     }],
-
-    grandTotal:{type:Number,
+    cashBack: {
+      type: Number,
+    },
+    grandTotal:{
+      type:Number,
+    required:true,
     default:0
     }
 })
