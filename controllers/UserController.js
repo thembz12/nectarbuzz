@@ -22,9 +22,11 @@ const signUp = async (req, res) => {
         const emailExist = await UserModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json(`User with email already exist.`);
-        } else {
+        } 
             //perform an encryption using salt
             const saltedPassword = await bcrypt.genSalt(10);
+            console.log("joy2")
+
             //perform an encrytion of the salted password
             const hashedPassword = await bcrypt.hash(password, saltedPassword);
             // create object of the body
@@ -37,6 +39,7 @@ const signUp = async (req, res) => {
                 phoneNumber: phoneNumber,
                 address: address.trim()
             });
+            console.log("joy1")
 
             const userToken = jwt.sign(
                 { id: user._id, email: user.email },
@@ -61,12 +64,12 @@ const signUp = async (req, res) => {
             ];
 w
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-
+console.log("joy")
             res.status(201).json({
                 message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
                 //data: user,
             });
-        }
+        
     }  catch (error){
         if (error.code === 11000) {
             const whatWentWrong = Object.keys(error.keyValue)[0];
