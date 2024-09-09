@@ -1,4 +1,4 @@
-const { addToCart, clearCart, updateCart, viewwCart } = require("../controller/CartController")
+const { addToCart, clearCart, updateCart, viewwCart } = require("../controllers/CartController")
 
 const router = express.Router()
 

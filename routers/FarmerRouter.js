@@ -1,5 +1,5 @@
 
-const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, logOut, farmerSignUp, updatePicture, updateUser, uploadDP} = require("../controller/FarmerController")
+const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, logOut, farmerSignUp, updatePicture, updateUser, uploadDP} = require("../controllers/FarmerController")
 const { authorize, isAdmin } = require("../middleware/authentication")
 const express = require(`express`)
 const upload = require("../utils/multer")
