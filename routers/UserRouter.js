@@ -1,4 +1,3 @@
-
 const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, updateUser, updatePicture, getOneFarmer, getAllFarmers, deleteFarmer,} = require("../controllers/UserController")
 const { authorize, isAdmin } = require("../middleware/authentication")
 const express = require(`express`)
