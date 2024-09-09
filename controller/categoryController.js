@@ -1,5 +1,5 @@
-const categoryModel = require('../model/categoryModel');
-const ProductModel = require('../model/ProductModel');
+const categoryModel = require('../models/categoryModel');
+const ProductModel = require('../models/ProductModel');
 
 const newCategory = async (req, res) => {
     try {

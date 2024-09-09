@@ -1,6 +1,6 @@
 const bcrypt = require(`bcrypt`)
 const jwt = require(`jsonwebtoken`)
-const FarmerModel = require(`../model/FarmerModel.js`)
+const FarmerModel = require(`../models/FarmerModel.js`)
 const cloudinary = require(`../config/cloudinary.js`)
 const sendMail = require(`../helpers/email.js`);
 const {

@@ -1,6 +1,6 @@
 const bcrypt = require(`bcrypt`)
 const jwt = require(`jsonwebtoken`)
-const UserModel = require("../model/UserModel.js");
+const UserModel = require("../models/UserModel.js");
 const cloudinary = require(`../config/cloudinary.js`)
 const sendMail = require(`../helpers/email.js`);
 const {
@@ -9,7 +9,7 @@ const {
     forgotPasswordTemplate,
     changePasswordTemplate
 } = require(`../helpers/html.js`);
-const FarmerModel = require("../model/FarmerModel.js");
+const FarmerModel = require("../models/FarmerModel.js");
 
 
 const signUp = async (req, res) => {

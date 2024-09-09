@@ -1,5 +1,5 @@
-const ProductModel = require ("../model/ProductModel")
-const FarmerModel = require ("../model/FarmerModel")
+const ProductModel = require ("../models/ProductModel")
+const FarmerModel = require ("../models/FarmerModel")
 const cloudinary = require ("cloudinary")
 
 
