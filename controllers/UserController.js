@@ -94,25 +94,25 @@ const FarmerModel = require("../models/FarmerModel.js");
             if(!firstName || !lastName || !email || !password || !sex || !age ){
                 return res.status(400).json(`Please enter all fields.`)
             }
-            const file = req.file.path
-            const image = await cloudinary.uploader.upload(file)
-            const emailExist = await userModel.findOne({ email });
+            // const file = req.file.path
+            // const image = await cloudinary.uploader.upload(file)
+            const emailExist = await UserModel.findOne({ email });
             if (emailExist) {
                 return res.status(400).json(`User with email already exist.`);
-            } else {
+            } 
                 //perform an encryption using salt
                 const saltedPassword = await bcrypt.genSalt(10);
                 //perform an encrytion of the salted password
                 const hashedPassword = await bcrypt.hash(password, saltedPassword);
                 // create object of the body
-                const user = new userModel({
+                const user = new UserModel({
                     firstName,
                     lastName,
                     email,
                     password: hashedPassword,
                     age,
                     sex,
-                    profilePicture: image.secure_url
+                    // profilePicture: image.secure_url
                 });
     
                 const userToken = jwt.sign(
@@ -134,7 +134,7 @@ const FarmerModel = require("../models/FarmerModel.js");
                     message: `Welcome ${user.firstName} kindly check your gmail to access the link to verify your email`,
                     data: user,
                 });
-            }
+            
         } catch (error) {
             res.status(500).json({
                 message: error.message,
