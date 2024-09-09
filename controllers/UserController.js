@@ -46,9 +46,10 @@ const signUp = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: "20 Minutes" }
             );
-            const verifyLink =  `${req.protocol}://${req.get("host")}https://nectarbuzz.onrender.com/api/v1/user-signup/api/v1/verify/${userToken}`;
+             const verifyLink = `${req.protocol}://${req.get(
+                "host"
+            )}/api/v1/verify/${userToken}`;
             
-    
             await user.save();
             await sendMail({
                 subject: `Kindly Verify your mail`,
