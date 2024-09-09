@@ -43,7 +43,7 @@ const signUp = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: "20 Minutes" }
             );
-            const verifyLink = `https://nectarbuzz.onrender.com/api/v1/verify/${userToken}`
+            const verifyLink =  `${req.protocol}://${req.get("host")}https://nectarbuzz.onrender.com/api/v1/user-signup/api/v1/verify/${userToken}`;
             
     
             await user.save();
@@ -59,12 +59,12 @@ const signUp = async (req, res) => {
                 "You’re capable of amazing things. We’re thrilled to be a part of your journey!",
                 "Every great journey begins with a first step. Thank you for choosing us to be part of your adventure!"
             ];
-
+w
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
 
             res.status(201).json({
                 message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
-                data: user,
+                //data: user,
             });
         }
     }  catch (error){
