@@ -35,7 +35,7 @@ const signUp = async (req, res) => {
                 lastName: lastName.trim(),
                 email:email.toLowerCase(),
                 password: hashedPassword,
-                sex:sex.trim(),
+                sex,
                 phoneNumber: phoneNumber,
                 address: address.trim()
             });
@@ -47,13 +47,20 @@ const signUp = async (req, res) => {
                 { expiresIn: "20 Minutes" }
             );
             const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/verify/${userToken}`;
-
-            await user.save();
-            await sendMail({
-                subject: `Kindly Verify your mail`,
+            let mailOptions = {
                 email: user.email,
+                subject: "Email Verification",
                 html: signUpTemplate(verifyLink, user.firstName),
-            });
+              };
+              await user.save();
+              await sendMail(mailOptions);
+             
+            // await user.save();
+            // await sendMail({
+            //     subject: `Kindly Verify your mail`,
+            //     email: user.email,
+            //     html: signUpTemplate(verifyLink, user.firstName),
+            // });
             const motivationalQuotes = [
                 "Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
                 "Success is not final; failure is not fatal: It is the courage to continue that counts. Let's achieve greatness together!",
@@ -66,7 +73,7 @@ w
 console.log("joy")
             res.status(201).json({
                 message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
-                //data: user,
+                data: user,
             });
         
     }  catch (error){
