@@ -1,4 +1,4 @@
-const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, updateUser, updatePicture, getOneFarmer, getAllFarmers, deleteFarmer,} = require("../controllers/UserController")
+const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, updateUser, updatePicture, getOneFarmer, getAllFarmers, deleteFarmer} = require('../controllers/UserController.js')
 const { authorize, isAdmin } = require("../middleware/authentication")
 const express = require(`express`)
 const upload = require("../utils/multer")
@@ -36,9 +36,9 @@ router.post(`/make-admin/:userID`, isAdmin, makeAdmin)
 
 router.delete(`/delete-user/:userID`, isAdmin, deleteUser)
 
-router.delete(`/delete-farmer/:userID`, isAdmin, deleteFarmer)
+ router.delete(`/delete-farmer/:userID`, isAdmin, deleteFarmer)
 
-router.post(`/log-out`, logOut)
+ router.post(`/log-out`, logOut)
 
 
-module.exports = router
+ module.exports = router

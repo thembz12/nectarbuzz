@@ -1,30 +1,55 @@
 const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
+const categoryModel = require ("../models/categoryModel")
 const cloudinary = require ("cloudinary")
+const fs = require ("fs")
 
 
 const createProduct = async (req,res)=>{
     try { 
+        const categoryID = req.params.categoryID
         const FarmerID = req.params.FarmerID
         const {honeyName, description, price}= req.body
         if(!honeyName || !description || !price){
             return res.status(400).json({message:"enter all fields"})
         }
-        const productPoster = await FarmerModel.findById({FarmerID})
-        if(!productPoster){
+
+        const farmerProduct = await FarmerModel.findById(FarmerID)
+        if(!farmerProduct){
             return res.status(400).json({
                 message: "farmer not founder"
             })
         }
+
+        const category = await categoryModel.findById(categoryID);
+      if (!category) {
+        return res.status(401).json({
+          message: "Category not found",
+        });
+      }
+
+        
         const file = req.file.path
-        const image = await cloudinary.uploader.upload(file)
-        const product = new ProductModel({
-            honeyName: honeyName.trim(),
+        const photo = await cloudinary.uploader.upload(file)
+        fs.unlink(file, (error) => {
+          if (err) {
+            console.log("unable to delete.", error);
+          }
+        });
+        const Newproduct = await ProductModel.create({
+            Farmers : FarmerID, honeyName,
+            farmerName: farmerProduct.firstName,
+            farmerID: farmerProduct.businessLicenseNo,
             description: description.trim(),
             price,
-            productPicture:image.secure_url
+            category: req.params.categoryID,
+            productPicture:photo.secure_url
         })
-        await product.save()
+        farmerProduct.product.push(Newproduct._id);
+        category.Product.push(Newproduct._id);
+
+        await farmerProduct.save()
+        await category.save()
         res.status(201).json({
             message:"product posted successfully",
             data:product

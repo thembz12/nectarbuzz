@@ -12,135 +12,76 @@ const {
 const FarmerModel = require("../models/FarmerModel.js");
 
 
-// const signUp = async (req, res) => {
-//     try {
-//          const {firstName, lastName, email, password, sex, address, phoneNumber} = req.body;
-//          if(!firstName || !lastName || !email || !password || !sex || !address || !phoneNumber ){
-//             return res.status(400).json(`Please enter all fields.`)
-//         }
-        
-//         const emailExist = await UserModel.findOne({ email });
-//         if (emailExist) {
-//             return res.status(400).json(`User with email already exist.`);
-//         } 
-//             //perform an encryption using salt
-//             const saltedPassword = await bcrypt.genSalt(10);
-//             console.log("joy2")
-
-//             //perform an encrytion of the salted password
-//             const hashedPassword = await bcrypt.hash(password, saltedPassword);
-//             // create object of the body
-//             const user = new UserModel({
-//                 firstName: firstName.trim(),
-//                 lastName: lastName.trim(),
-//                 email:email.toLowerCase(),
-//                 password: hashedPassword,
-//                 sex:sex.trim(),
-//                 phoneNumber: phoneNumber,
-//                 address: address.trim()
-//             });
-//             console.log("joy1")
-
-//             const userToken = jwt.sign(
-//                 { id: user._id, email: user.email },
-//                 process.env.JWT_SECRET,
-//                 { expiresIn: "20 Minutes" }
-//             );
-//              const verifyLink = `${req.protocol}://${req.get(
-//                 "host"
-//             )}/api/v1/verify/${userToken}`;
-
-//             await user.save();
-//             await sendMail({
-//                 subject: `Kindly Verify your mail`,
-//                 email: user.email,
-//                 html: signUpTemplate(verifyLink, user.firstName),
-//             });
-//             const motivationalQuotes = [
-//                 "Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
-//                 "Success is not final; failure is not fatal: It is the courage to continue that counts. Let's achieve greatness together!",
-//                 "The future belongs to those who believe in the beauty of their dreams. Thank you for believing in yours with us!",
-//                 "You’re capable of amazing things. We’re thrilled to be a part of your journey!",
-//                 "Every great journey begins with a first step. Thank you for choosing us to be part of your adventure!"
-//             ];
-// w
-//             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-// console.log("joy")
-//             res.status(201).json({
-//                 message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
-//                 //data: user,
-//             });
-        
-//     }  catch (error){
-//         if (error.code === 11000) {
-//             const whatWentWrong = Object.keys(error.keyValue)[0];
-//             return res.status(500).json({ message: `A user with this ${whatWentWrong} already exists. Please check your phoneNumber or email,either of them already exist.` });
-//           }else{
-//             res.status(500).json({
-//                 message: 'An error occurred while processing your request.',
-//                 errorMessage:error.message
-//             })
-//           }
-//      }}
-
-
-
-     const signUp = async (req, res) => {
-        try {
-    
-            const { firstName, lastName, email, password, sex, age } = req.body;
-            console.log(firstName);
-            
-            if(!firstName || !lastName || !email || !password || !sex || !age ){
-                return res.status(400).json(`Please enter all fields.`)
-            }
-            // const file = req.file.path
-            // const image = await cloudinary.uploader.upload(file)
-            const emailExist = await UserModel.findOne({ email });
-            if (emailExist) {
-                return res.status(400).json(`User with email already exist.`);
-            } 
-                //perform an encryption using salt
-                const saltedPassword = await bcrypt.genSalt(10);
-                //perform an encrytion of the salted password
-                const hashedPassword = await bcrypt.hash(password, saltedPassword);
-                // create object of the body
-                const user = new UserModel({
-                    firstName,
-                    lastName,
-                    email,
-                    password: hashedPassword,
-                    age,
-                    sex,
-                    // profilePicture: image.secure_url
-                });
-    
-                const userToken = jwt.sign(
-                    { id: user._id, email: user.email },
-                    process.env.JWT_SECRET,
-                    { expiresIn: "10 Minutes" }
-                );
-                const verifyLink = `${req.protocol}://${req.get(
-                    "host"
-                )}/api/v1/verify/${userToken}`;
-        
-                await user.save();
-                await sendMail({
-                    subject: `Kindly Verify your mail`,
-                    email: user.email,
-                    html: signUpTemplate(verifyLink, user.firstName),
-                });
-                res.status(201).json({
-                    message: `Welcome ${user.firstName} kindly check your gmail to access the link to verify your email`,
-                    data: user,
-                });
-            
-        } catch (error) {
-            res.status(500).json({
-                message: error.message,
-            });
+const signUp = async (req, res) => {
+    try {
+         const {firstName, lastName, email, password, sex, address, phoneNumber} = req.body;
+         if(!firstName || !lastName || !email || !password || !sex || !address || !phoneNumber ){
+            return res.status(400).json(`Please enter all fields.`)
         }
-    };
+        
+        const emailExist = await UserModel.findOne({ email });
+        if (emailExist) {
+            return res.status(400).json(`User with email already exist.`);
+        } 
+            //perform an encryption using salt
+            const saltedPassword = await bcrypt.genSalt(10);
+            console.log("joy2")
+
+            //perform an encrytion of the salted password
+            const hashedPassword = await bcrypt.hash(password, saltedPassword);
+            // create object of the body
+            const user = new UserModel({
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                email:email.toLowerCase(),
+                password: hashedPassword,
+                sex:sex.trim(),
+                phoneNumber: phoneNumber,
+                address: address.trim()
+            });
+            console.log("joy1")
+
+            const userToken = jwt.sign(
+                { id: user._id, email: user.email },
+                process.env.JWT_SECRET,
+                { expiresIn: "20 Minutes" }
+            );
+            const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/verify/${userToken}`;
+
+            await user.save();
+            await sendMail({
+                subject: `Kindly Verify your mail`,
+                email: user.email,
+                html: signUpTemplate(verifyLink, user.firstName),
+            });
+            const motivationalQuotes = [
+                "Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
+                "Success is not final; failure is not fatal: It is the courage to continue that counts. Let's achieve greatness together!",
+                "The future belongs to those who believe in the beauty of their dreams. Thank you for believing in yours with us!",
+                "You’re capable of amazing things. We’re thrilled to be a part of your journey!",
+                "Every great journey begins with a first step. Thank you for choosing us to be part of your adventure!"
+            ];
+w
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+console.log("joy")
+            res.status(201).json({
+                message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
+                //data: user,
+            });
+        
+    }  catch (error){
+        if (error.code === 11000) {
+            const whatWentWrong = Object.keys(error.keyValue)[0];
+            return res.status(500).json({ message: `A user with this ${whatWentWrong} already exists. Please check your phoneNumber or email,either of them already exist.` });
+          }else{
+            res.status(500).json({
+                message: 'An error occurred while processing your request.',
+                errorMessage:error.message
+            })
+          }
+     }}
+
+
 
 const verifyEmail = async (req, res) => {
     try {
