@@ -43,7 +43,7 @@ const farmerSignUp = async (req, res) => {
             );
             const verifyLink = `${req.protocol}://${req.get(
                 "host"
-            )}/api/v1/farmer/verify/${userToken}`;
+            )}/api/v1/verify/${userToken}`;
     
             await user.save();
             await sendMail({

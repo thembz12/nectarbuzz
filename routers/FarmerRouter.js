@@ -15,15 +15,15 @@ router.get(`/verify/farmer/:token`, verifyEmail)
 
 router.post(`/resend-verification/farmer`, resendVerificationEmail)
 
-router.put(`/update-user/:userID`, upload.single('profilePicture'), updateUser)
+router.put(`/update-user/farmer/:userID`, upload.single('profilePicture'), updateUser)
 
-router.post(`/forgot-password`, forgotPassword)
+router.post(`/forgot-password/farmer`, forgotPassword)
 
-router.post(`/change-password/:token`, changePassword)
+router.post(`/change-passwordfarmer/farmer/:token`, changePassword)
 
-router.post(`/reset-password/:token`, resetPassword)
+router.post(`/reset-password/farmer/:token`, resetPassword)
 
-router.post(`/update-profilepicture/:token`, uploadDP)
+router.post(`/update-profilepicture/farmer/:token`, uploadDP)
 
 router.post(`/log-out`, logOut)
 
