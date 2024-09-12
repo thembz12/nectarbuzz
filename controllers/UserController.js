@@ -20,7 +20,7 @@ const signUp = async (req, res) => {
                return res.status(400).json(`Please enter all fields.`)
            }
        
-        const emailExist = await FarmerModel.findOne({ email });
+        const emailExist = await UserModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json(`User with email already exist.`);
         } else {
