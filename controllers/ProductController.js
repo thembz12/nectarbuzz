@@ -35,11 +35,11 @@ const createProduct = async (req,res)=>{
         console.log(path);
         
         const photo = await cloudinary.uploader.upload(file)
-        // fs.unlink(file.path, (err) => {
-        //   if (err) {
-        //     console.log("unable to delete.", err);
-        //   }
-        // });
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.log("unable to delete.", err);
+          }
+        });
         const Newproduct = await ProductModel.create({
             Farmers : FarmerID, honeyName,
             farmerName: farmerProduct.firstName,
@@ -88,7 +88,7 @@ const createProduct = async (req,res)=>{
                 const statusPending = await ProductModel.find()
                 if(statusPending.lenght = pending){
                     return res.status(200).json({
-                        message:`below are ${pending.lenght} product waiting for approval`, data:status
+                        message:`below are ${pending.lenght} product waiting for approval`, data:statusPending
                     })
                 }
                 
@@ -102,9 +102,9 @@ const createProduct = async (req,res)=>{
             try {
 
                 const statusApproved = await ProductModel.find()
-                if(status.lenght = approved){
+                if(statusApproved.lenght = approved){
                     return res.status(200).json({
-                        message:`below are ${approved.lenght} product waiting for approval`, data:status
+                        message:`below are ${approved.lenght} product waiting for approval`, data:statusApproved
                     })
                 }
                 
