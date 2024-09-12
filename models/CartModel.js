@@ -1,7 +1,7 @@
-const { schema } = require("@hapi/joi/lib/compile")
+
 const mongoose = require ("mongoose")
 
-const cartSchema = new schema.mongoose({
+const cartSchema = new mongoose.Schema({
     user: {
 
         type: mongoose.Schema.Types.ObjectId,

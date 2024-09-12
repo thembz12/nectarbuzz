@@ -11,7 +11,7 @@ router.post(`/farmer-signup`,FarmerSingUpValidator,farmerSignUp)
 
 router.post(`/farmer-login`,FarmerlogInValidator, loginUser)
 
-router.get(`/verify/farmer/:token`, verifyEmail)
+router.get(`/verifyfarmer/:token`, verifyEmail)
 
 router.post(`/resend-verification/farmer`, resendVerificationEmail)
 
