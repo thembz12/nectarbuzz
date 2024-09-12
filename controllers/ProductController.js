@@ -110,9 +110,7 @@ const createProduct = async (req,res)=>{
                 
             } catch (error) {
                 res.status(500).json(error.message)
-                
-            }
-        }
+                 }}
 
         const approvedProduct = async(req, res)=> {
             try {
