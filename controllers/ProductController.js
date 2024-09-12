@@ -26,22 +26,20 @@ const createProduct = async (req,res)=>{
       if (!category) {
         return res.status(401).json({
           message: "Category not found",
-        });
-      }
+        })}
 
-        
         const file = req.file.path
-
-        console.log(path);
+        console.log(req.file);
         
         const photo = await cloudinary.uploader.upload(file)
-        fs.unlink(file.path, (err) => {
+        fs.unlink(file, (err) => {
           if (err) {
             console.log("unable to delete.", err);
           }
         });
+        
         const Newproduct = await ProductModel.create({
-            Farmers : FarmerID, honeyName,
+            farmers : FarmerID, honeyName,
             farmerName: farmerProduct.firstName,
             farmerID: farmerProduct.businessLicenseNo,
             description: description.trim(),
@@ -52,12 +50,14 @@ const createProduct = async (req,res)=>{
         })
         farmerProduct.product.push(Newproduct._id);
         category.Products.push(Newproduct._id);
+        
+        
 
         await farmerProduct.save()
         await category.save()
         res.status(201).json({
             message:"product posted successfully",
-            data:product
+            data:farmerProduct
         })
         
     } catch (error) {
@@ -82,36 +82,48 @@ const createProduct = async (req,res)=>{
             }
         }
 
-        const getAllPendingPost = async  (req,res)=>{
+        const getAllPendingPost = async (req, res) => {
             try {
-
-                const statusPending = await ProductModel.find()
-                if(statusPending.lenght = pending){
+                
+                const pendingProducts = await ProductModel.find({ ProductStatus: 'pending' });
+        
+                if (pendingProducts.length > 0) {
                     return res.status(200).json({
-                        message:`below are ${pending.lenght} product waiting for approval`, data:statusPending
-                    })
+                        message: `Below are ${pending.length} pending products.`,
+                        data: pendingProducts,
+                    });
+                } else {
+                    return res.status(404).json({
+                        message: 'No approved products found.',
+                    });
                 }
                 
             } catch (error) {
-                res.status(500).json(error.message)
-                
+                res.status(500).json({ error: error.message });
             }
-        }
+        };
 
-        const getAllApprovedPost = async  (req,res)=>{
+        const getAllApprovedPost = async (req, res) => {
             try {
-
-                const statusApproved = await ProductModel.find()
-                if(statusApproved.lenght = approved){
+                
+                const approvedProducts = await ProductModel.find({ ProductStatus: 'approved' });
+        
+                if (approvedProducts.length > 0) {
                     return res.status(200).json({
-                        message:`below are ${approved.lenght} product waiting for approval`, data:statusApproved
-                    })
+                        message: `Below are ${approvedProducts.length} approved products.`,
+                        data: approvedProducts,
+                    });
+                } else {
+                    return res.status(404).json({
+                        message: 'No approved products found.',
+                    });
                 }
                 
             } catch (error) {
-                res.status(500).json(error.message)
-                 }}
-
+                res.status(500).json({ error: error.message });
+            }
+        };
+        
         const approvedProduct = async(req, res)=> {
             try {
                 const {productID} = req.params

@@ -1,10 +1,12 @@
 const express = require ("express")
 const { createProduct, getAll, getAllApprovedPost, getAllPendingPost, approvedProduct, getOne } = require("../controllers/ProductController")
 const { authorize, isAdmin } = require("../middleware/authentication")
+const upload = require("../utils/multer")
+
 const router = express.Router()
 
 
-router.post("/:farmerID/product-post/:categoryID",createProduct)
+router.post("/:farmerID/product-post/:categoryID", upload.single('productPicture'),createProduct)
 
 router.get("/getone-product", getOne)
 

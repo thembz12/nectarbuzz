@@ -364,7 +364,7 @@ const getAll = async(req,res)=>{
      if(users.length <= 0){
         return res.status(404).json(`No available users`)
      }else{
-        res.status(200).json({message:`Kindly find the ${users.length} registered users & students below`, data: users})
+        res.status(200).json({message:`Kindly find the ${users.length} registered users below`, data: users})
      }
         
     } catch (error) {
@@ -378,7 +378,7 @@ const getAllFarmers = async(req,res)=>{
      if(users.length <= 0){
         return res.status(404).json(`No available users`)
      }else{
-        res.status(200).json({message:`Kindly find the ${users.length} registered users & students below`, data: users})
+        res.status(200).json({message:`Kindly find the ${users.length} registered farmers below`, data: users})
      }
         
     } catch (error) {
