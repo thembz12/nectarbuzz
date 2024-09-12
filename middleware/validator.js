@@ -26,18 +26,6 @@ exports.singUpVlidator = async (req, res, next) => {
         "string.min": "the minium name must be at least 3 character long",
         "string.pattern.base": "first name should only contain letters",
       }),
-    // surnName: joiValidation
-    //   .string()
-    //   .required()
-    //   .min(3)
-    //   .trim()
-    //   .regex(/^[A-Za-z]+(?: [A-Za-z]+)*$/)
-    //   .messages({
-    //     "any.required": "please provide surnName",
-    //     "string.empty": "surnName cannot be empty",
-    //     "string.min": "the minium name must be at least 3 character long",
-    //     "string.pattern.base": "first name should only contain letters",
-    //   }),
 
     email: joiValidation
     .string()
