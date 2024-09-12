@@ -573,7 +573,6 @@ const updateUser = async (req, res) => {
       res.status(500).json({
         message: error.message
       });
-    }
-  };
+    }};
 
 module.exports = {signUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword, changePassword, makeAdmin, getAll, getOne, updateUser, updatePicture, deleteUser, deleteFarmer, getAllFarmers, getOneFarmer, logOut}
