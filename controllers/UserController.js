@@ -46,7 +46,7 @@ const signUp = async (req, res) => {
             const verifyLink = `${req.protocol}://${req.get(
                 "host"
             )}/api/v1/verify/${userToken}`;
-
+    
             await user.save();
             await sendMail({
                 subject: `Kindly Verify your mail`,

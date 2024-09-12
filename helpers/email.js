@@ -31,11 +31,11 @@
 // }
 
 
-
+ 
 // module.exports = sendMail
 
 
-const nodeMailer = require(`nodemailer`)
+const nodeMailer = require(`nodemailer`) 
 
 require ("dotenv").config()
 
