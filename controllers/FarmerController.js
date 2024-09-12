@@ -43,7 +43,7 @@ const farmerSignUp = async (req, res) => {
             );
             const verifyLink = `${req.protocol}://${req.get(
                 "host"
-            )}/api/v1/verify/${userToken}`;
+            )}/api/v1/farmer/verify/${userToken}`;
     
             await user.save();
             await sendMail({
@@ -87,10 +87,10 @@ const verifyEmail = async (req, res) => {
     try {
         // Extract the token from the request params
         const { token } = req.params;
-        console.log(token)
+        
         // Extract the email from the verified token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(email)
+        
         // Find the user with the email
         const user = await FarmerModel.findOne({ email });
         // Check if the user is still in the database

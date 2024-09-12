@@ -1,6 +1,6 @@
 const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
-const categoryModel = require ("../models/categoryModel")
+const categoryModel = require ("../models/CategoryModel")
 const cloudinary = require ("cloudinary")
 const path = require ("path")
 const fs = require ("fs")
@@ -86,7 +86,7 @@ const createProduct = async (req,res)=>{
             try {
 
                 const statusPending = await ProductModel.find()
-                if(status.lenght = pending){
+                if(statusPending.lenght = pending){
                     return res.status(200).json({
                         message:`below are ${pending.lenght} product waiting for approval`, data:status
                     })
@@ -121,7 +121,7 @@ const createProduct = async (req,res)=>{
                 if(!WhatToApprove){
                     return res.status(404).json(`User with ID ${productID} was not found`)
                 }
-                WhatToApprove.productStatus = true
+                WhatToApprove.productStatus = "approved"
                 await user.save()
                 res.status(200).json({message: `Dear ${WhatToApprove.productID}, is now an approved`, data: WhatToApprove})
             } catch (error) {
