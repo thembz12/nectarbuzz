@@ -38,11 +38,8 @@ const customerSchema = new mongoose.Schema({
     isVerified: {
       type: Boolean, 
       default: false 
-  },
-  isFarmer: {
-    type: Boolean, 
-    default: true 
-},
+  }, 
+
   product:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Product"
@@ -50,6 +47,6 @@ const customerSchema = new mongoose.Schema({
   blackList:[]
 },{timestamps:true})
 
-const FarmerModel = mongoose.model(`Farmers`,customerSchema)
+const FarmerModel = mongoose.model(`Farmer`,customerSchema)
 
 module.exports = FarmerModel

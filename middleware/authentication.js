@@ -64,23 +64,10 @@ const isAdmin = async (req, res, next) => {
     }
   };
 
-  const isFarmer = async (req, res, next) => {
-    try {
-      if (req.user.isAdmin) {
-        next();
-      } else {
-        res.status(403).json({ message: "Unauthorized: Not an admin" });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  };
+  
   
   
   module.exports = {
     authorize,
-    isAdmin,
-    isFarmer
+    isAdmin
   };

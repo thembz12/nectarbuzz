@@ -9,32 +9,32 @@ const {
     signUpTemplate,
 } = require(`../helpers/html.js`);
 
+
 const farmerSignUp = async (req, res) => {
-    
     try {
-        const { firstName,lastName, businessLicenseNo, email, password, address, phoneNumber} = req.body;
-        if(!firstName ||!lastName || !businessLicenseNo || !email || !password || !phoneNumber || !address ){
-            return res.status(400).json(`Please enter all fields.`)
-        }
+        
+            const {firstName, lastName, email, password,  businessLicenseNo, address, phoneNumber} = req.body;
+            if(!firstName || !lastName || !email || !password || ! businessLicenseNo || !address || !phoneNumber ){
+               return res.status(400).json(`Please enter all fields.`)
+           }
        
         const emailExist = await FarmerModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json(`User with email already exist.`);
         } else {
-            //perform an encryption using salt
-            const saltedPassword = await bcrypt.genSalt(10);
-            //perform an encrytion of the salted password
-            const hashedPassword = await bcrypt.hash(password, saltedPassword);
-            // create object of the body
-            const user = new FarmerModel({
-                firstName: firstName.trim(),
-                lastName: lastName.trim(),
-                email: email.toLowerCase(),
-                password: hashedPassword,
-                address: address.trim(),
-                businessLicenseNo,
-                phoneNumber
-            });
+        const saltedPassword = await bcrypt.genSalt(10);
+        //perform an encrytion of the salted password
+        const hashedPassword = await bcrypt.hash(password, saltedPassword);
+        // create object of the body
+        const user = new FarmerModel({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email:email.toLowerCase(),
+            password: hashedPassword,
+            businessLicenseNo,
+            phoneNumber: phoneNumber,
+            address: address.trim() 
+        }); 
 
             const userToken = jwt.sign(
                 { id: user._id, email: user.email },
@@ -44,7 +44,7 @@ const farmerSignUp = async (req, res) => {
             const verifyLink = `${req.protocol}://${req.get(
                 "host"
             )}/api/v1/verify/${userToken}`;
-
+    
             await user.save();
             await sendMail({
                 subject: `Kindly Verify your mail`,
@@ -81,12 +81,16 @@ const farmerSignUp = async (req, res) => {
      }}
 
 
+
+
 const verifyEmail = async (req, res) => {
     try {
         // Extract the token from the request params
         const { token } = req.params;
+        console.log(token)
         // Extract the email from the verified token
         const { email } = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(email)
         // Find the user with the email
         const user = await FarmerModel.findOne({ email });
         // Check if the user is still in the database

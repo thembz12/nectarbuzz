@@ -2,17 +2,18 @@ const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
 const categoryModel = require ("../models/categoryModel")
 const cloudinary = require ("cloudinary")
+const path = require ("path")
 const fs = require ("fs")
 
 
 const createProduct = async (req,res)=>{
     try { 
         const categoryID = req.params.categoryID
-        const FarmerID = req.params.FarmerID
+        const FarmerID = req.params.farmerID
         const {honeyName, description, price}= req.body
-        if(!honeyName || !description || !price){
-            return res.status(400).json({message:"enter all fields"})
-        }
+        // if(!honeyName || !description || !price){
+        //     return res.status(400).json({message:"enter all fields"})
+        // }
 
         const farmerProduct = await FarmerModel.findById(FarmerID)
         if(!farmerProduct){
@@ -30,12 +31,15 @@ const createProduct = async (req,res)=>{
 
         
         const file = req.file.path
+        
+        console.log(path);
+        
         const photo = await cloudinary.uploader.upload(file)
-        fs.unlink(file, (error) => {
-          if (err) {
-            console.log("unable to delete.", error);
-          }
-        });
+        // fs.unlink(file.path, (err) => {
+        //   if (err) {
+        //     console.log("unable to delete.", err);
+        //   }
+        // });
         const Newproduct = await ProductModel.create({
             Farmers : FarmerID, honeyName,
             farmerName: farmerProduct.firstName,
@@ -43,10 +47,11 @@ const createProduct = async (req,res)=>{
             description: description.trim(),
             price,
             category: req.params.categoryID,
+            farmerProduct: req.params.farmerID,
             productPicture:photo.secure_url
         })
         farmerProduct.product.push(Newproduct._id);
-        category.Product.push(Newproduct._id);
+        category.Products.push(Newproduct._id);
 
         await farmerProduct.save()
         await category.save()

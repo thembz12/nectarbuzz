@@ -3,6 +3,7 @@ require ("./config/databaseConfig.js")
 const ProductRouter = require ("./routers/ProductRouter.js")
 const router = require ("./routers/UserRouter.js")
 const FarmerRouter = require ("./routers/FarmerRouter.js")
+const categoryRouter = require ("./routers/CategoryRouter.js")
 const app = express()
 const cors = require ("cors")
 app.use(express.json())
@@ -10,8 +11,9 @@ app.use(express.json())
 app.use(cors())
 app.use('/uploads', express.static('uploads'))
 app.use("/api/v1", router)
-app.use("/api/v1",FarmerRouter)
+app.use("/api/v1/",FarmerRouter)
 app.use("/api/v1",ProductRouter)
+app.use("/api/v1",categoryRouter)
 
 
 
