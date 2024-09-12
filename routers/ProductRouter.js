@@ -4,7 +4,7 @@ const { authorize } = require("../middleware/authentication")
 const router = express.Router()
 
 
-router.post("/:farmerID/product-post/:categoryID",authorize,createProduct)
+router.post("/:farmerID/product-post/:categoryID",createProduct)
 
 //router.get("/getall-product")
 

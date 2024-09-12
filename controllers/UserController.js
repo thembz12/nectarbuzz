@@ -14,72 +14,66 @@ const FarmerModel = require("../models/FarmerModel.js");
 
 const signUp = async (req, res) => {
     try {
-         const {firstName, lastName, email, password, sex, address, phoneNumber} = req.body;
-         if(!firstName || !lastName || !email || !password || !sex || !address || !phoneNumber ){
-            return res.status(400).json(`Please enter all fields.`)
-        }
         
-        const emailExist = await UserModel.findOne({ email });
+            const {firstName, lastName, email, password, sex, address, phoneNumber} = req.body;
+            if(!firstName || !lastName || !email || !password || !sex || !address || !phoneNumber ){
+               return res.status(400).json(`Please enter all fields.`)
+           }
+       
+        const emailExist = await FarmerModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json(`User with email already exist.`);
-        } 
-            //perform an encryption using salt
-            const saltedPassword = await bcrypt.genSalt(10);
-            console.log("joy2")
-
-            //perform an encrytion of the salted password
-            const hashedPassword = await bcrypt.hash(password, saltedPassword);
-            // create object of the body
-            const user = new UserModel({
-                firstName: firstName.trim(),
-                lastName: lastName.trim(),
-                email:email.toLowerCase(),
-                password: hashedPassword,
-                sex,
-                phoneNumber: phoneNumber,
-                address: address.trim()
-            });
-            console.log("joy1")
+        } else {
+        const saltedPassword = await bcrypt.genSalt(10);
+        //perform an encrytion of the salted password
+        const hashedPassword = await bcrypt.hash(password, saltedPassword);
+        // create object of the body
+        const user = new UserModel({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email:email.toLowerCase(),
+            password: hashedPassword,
+            sex,
+            phoneNumber: phoneNumber,
+            address: address.trim()
+        });
 
             const userToken = jwt.sign(
                 { id: user._id, email: user.email },
                 process.env.JWT_SECRET,
                 { expiresIn: "20 Minutes" }
             );
-            const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/verify/${userToken}`;
-            let mailOptions = {
+            const verifyLink = `${req.protocol}://${req.get(
+                "host"
+            )}/api/v1/verify/${userToken}`;
+
+            await user.save();
+            await sendMail({
+                subject: `Kindly Verify your mail`,
                 email: user.email,
-                subject: "Email Verification",
                 html: signUpTemplate(verifyLink, user.firstName),
-              };
-              await user.save();
-              await sendMail(mailOptions);
-             
-            // await user.save();
-            // await sendMail({
-            //     subject: `Kindly Verify your mail`,
-            //     email: user.email,
-            //     html: signUpTemplate(verifyLink, user.firstName),
-            // });
+            });
+
             const motivationalQuotes = [
-                "Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
+                "Welcome! Remember, the journey of a thousand miles begins with a single step. Let’s take that step together!",
                 "Success is not final; failure is not fatal: It is the courage to continue that counts. Let's achieve greatness together!",
                 "The future belongs to those who believe in the beauty of their dreams. Thank you for believing in yours with us!",
                 "You’re capable of amazing things. We’re thrilled to be a part of your journey!",
                 "Every great journey begins with a first step. Thank you for choosing us to be part of your adventure!"
             ];
-w
+
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-console.log("joy")
+
             res.status(201).json({
                 message: `Welcome ${user.firstName}!${randomQuote}. KINDLY CHECK YOUR MAIL TO ACCESS THE LINK TO VERIFY YOUR EMAIL`,
                 data: user,
             });
-        
-    }  catch (error){
+        }
+
+    } catch (error){
         if (error.code === 11000) {
             const whatWentWrong = Object.keys(error.keyValue)[0];
-            return res.status(500).json({ message: `A user with this ${whatWentWrong} already exists. Please check your phoneNumber or email,either of them already exist.` });
+            return res.status(500).json({ message: `A user with this ${whatWentWrong} exist. Please check your phoneNumber or email,either of them already exist.` });
           }else{
             res.status(500).json({
                 message: 'An error occurred while processing your request.',
@@ -87,6 +81,7 @@ console.log("joy")
             })
           }
      }}
+
 
 
 
@@ -440,12 +435,12 @@ const deleteUser = async (req, res) =>{
 
 const deleteFarmer = async (req, res) =>{
     try {
-        const {userID} = req.params
-        const user = await UserModel.findById(userID)
+        const {farmerID} = req.params
+        const user = await FarmerModel.findById(farmerID)
         if(!user){
             return res.status(404).json(`User not found.`)
         }
-        const deleteUser = await FarmerModel.findByIdAndDelete(userID)
+        const deleteUser = await FarmerModel.findByIdAndDelete(farmerID)
         res.status(200).json(`User deleted successfully.`)
     } catch (error) {
         res.status(500).json(error.message)
