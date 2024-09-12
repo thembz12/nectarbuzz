@@ -38,7 +38,7 @@ const farmerSignUp = async (req, res) => {
 
             const userToken = jwt.sign(
                 { id: user._id, email: user.email },
-                process.env.JWT_SECRECT,
+                process.env.JWT_SECRET,
                 { expiresIn: "20 Minutes" }
             );
             const verifyLink = `${req.protocol}://${req.get(

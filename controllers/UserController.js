@@ -35,7 +35,7 @@ const signUp = async (req, res) => {
             password: hashedPassword,
             sex,
             phoneNumber: phoneNumber,
-            address: address.trim()
+            address: address.trim() 
         });
 
             const userToken = jwt.sign(
