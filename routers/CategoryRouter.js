@@ -1,4 +1,4 @@
-const { newCategory, getAllCategories, oneCategory, getAllCategoriesByRestaurant } = require('../controllers/categoryController');
+const { newCategory, getAllCategories, oneCategory, getAllCategoriesByRestaurant } = require('../controllers/CategoryController');
 const router = require('express').Router();
 
 
