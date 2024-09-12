@@ -1,4 +1,4 @@
-const CategoryModel = require('../models/CategoryModel');
+const CategoriesModel = require('../models/CategoriesModel');
 const ProductModel = require('../models/ProductModel');
 
 const newCategory = async (req, res) => {
@@ -11,7 +11,7 @@ const newCategory = async (req, res) => {
         }
 
         // Create a new category instance without any menus
-        const newCategory = new CategoryModel({ title });
+        const newCategory = new CategoriesModel({ title });
 
         // Save the new category to the database
         const savedCategory = await newCategory.save();
@@ -31,7 +31,7 @@ const newCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
     try {
-        const categories = await CategoryModel.find();
+        const categories = await CategoriesModel.find();
 
         if (categories.length === 0) {
             return res.status(404).json({
@@ -50,7 +50,7 @@ const getAllCategories = async (req, res) => {
 
 const oneCategory = async (req, res) => {
     try {
-        const category = await CategoryModel.findById(req.params.id).populate('product');
+        const category = await CategoriesModel.findById(req.params.id).populate('product');
         if (!category) {
             return res.status(404).json({
                 message: 'Category not found'

@@ -1,6 +1,6 @@
 const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
-const categoryModel = require ("../models/CategoryModel")
+const categoryModel = require ("../models/CategoriesModel")
 const cloudinary = require ("cloudinary")
 const path = require ("path")
 const fs = require ("fs")
