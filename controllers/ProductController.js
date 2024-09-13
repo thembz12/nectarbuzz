@@ -54,7 +54,7 @@ const createProduct = async (req,res)=>{
         await farmerProduct.save()
         await category.save()
         res.status(201).json({
-            message:"product posted successfully",
+            message:"product posted successfully and waiting for approval",
             data:farmerProduct
         })
         
@@ -92,7 +92,7 @@ const createProduct = async (req,res)=>{
                     });
                 } else {
                     return res.status(404).json({
-                        message: 'No approved products found.',
+                        message: 'No pending products found.',
                     });
                 }
                 
