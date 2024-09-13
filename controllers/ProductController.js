@@ -83,11 +83,11 @@ const createProduct = async (req,res)=>{
         const getAllPendingPost = async (req, res) => {
             try {
                 
-                const pendingProducts = await ProductModel.find({ ProductStatus: 'pending' });
+                const pendingProducts = await ProductModel.find({ productStatus: 'pending' });
         
                 if (pendingProducts.length > 0) {
                     return res.status(200).json({
-                        message: `Below are ${pending.length} pending products.`,
+                        message: `Below are ${pendingProducts.length} pending products.`,
                         data: pendingProducts,
                     });
                 } else {
@@ -103,8 +103,8 @@ const createProduct = async (req,res)=>{
 
         const getAllApprovedPost = async (req, res) => {
             try {
-                
-                const approvedProducts = await ProductModel.find({ ProductStatus: 'approved' });
+               
+                const approvedProducts = await ProductModel.find({ productStatus: 'approved' });
         
                 if (approvedProducts.length > 0) {
                     return res.status(200).json({
@@ -130,8 +130,13 @@ const createProduct = async (req,res)=>{
                     return res.status(404).json(`User with ID ${productID} was not found`)
                 }
                 WhatToApprove.productStatus = "approved"
-                await user.save()
-                res.status(200).json({message: `Dear ${WhatToApprove.productID}, is now an approved`, data: WhatToApprove})
+                if(WhatToApprove.productStatus === "approved"){
+                    return res.status(404).json({
+                        message:"post has already been approved."
+                    })
+                }
+                await WhatToApprove.save()
+                res.status(200).json({message: `your ${WhatToApprove.productID}, is now an approved`, data: WhatToApprove})
             } catch (error) {
                 res.status(500).json(error.message)
             }

@@ -16,7 +16,7 @@ router.get("/getall-approved-product",authorize, getAllApprovedPost)
 
 router.get("/getall-pending-product",authorize, getAllPendingPost)
 
-router.get("/approved-product",isAdmin, approvedProduct)
+router.post("/approved-product/:productID",authorize, approvedProduct)
 
 
 module.exports = router
