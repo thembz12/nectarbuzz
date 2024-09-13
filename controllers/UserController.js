@@ -227,7 +227,7 @@ const forgotPassword = async (req, res) => {
         });
         const resetLink = `${req.protocol}://${req.get(
             "host"
-        )}/api/v1/user/reset-password/${resetToken}`;
+        )}/api/v1/reset-password/${resetToken}`;
 
         // Send reset password email
         const mailOptions = {
@@ -319,7 +319,7 @@ const changePassword = async (req, res) => {
 
         const resetLink = `${req.protocol}://${req.get(
             "host"
-        )}/api/v1/user/change-password/${resetToken}`;
+        )}/api/v1/change-password/${resetToken}`;
 
         // Send reset password email
         const mailOptions = {
@@ -412,7 +412,7 @@ const getOneFarmer = async (req, res) => {
             return res.status(404).json(`User not found.`)
         }
         res.status(200).json({
-            message: `Dear ${user.fullName}, kindly find your information below:`,
+            message: `Dear ${user.firstName}, kindly find your information below:`,
             data: user
         })
     } catch (error) {
@@ -540,11 +540,6 @@ const updateUser = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
           }
   
-          // Save the current profile picture details
-          const formerImage = {
-            pictureId: user.profilePicture.pictureId,
-            pictureUrl: user.profilePicture.pictureUrl
-          };
   
           // Upload new profile picture to Cloudinary
           const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "users_dp" });
@@ -552,9 +547,7 @@ const updateUser = async (req, res) => {
           // Prepare update data
           const pictureUpdate = {
             profilePicture: {
-              pictureId: cloudProfile.public_id,
               pictureUrl: cloudProfile.secure_url,
-              formerImages: [...user.profilePicture.formerImages, formerImage] // Save old picture details
             }
           };
   

@@ -38,7 +38,7 @@ exports.viewwCart = async (req, res) => {
     const userID = req.params.userID
 
     try {
-        const cart = await CartModel.findOne({ buyer: buyerId }).populate('items.product');
+        const cart = await CartModel.findOne({ user: userID }).populate('items.product');
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
@@ -110,4 +110,4 @@ exports.clearCart = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}; 

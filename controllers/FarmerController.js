@@ -330,22 +330,22 @@ const changePassword = async (req, res) => {
 };
 
 
-const getOne = async (req, res) => {
-    try {
-        const {farmerID} = req.params
+// const getOne = async (req, res) => {
+//     try {
+//         const {farmerID} = req.params
 
-        const user = await FarmerModel.findOne({farmerID})
-        if(!user){
-            return res.status(404).json(`User not found.`)
-        }
-        res.status(200).json({
-            message: `Dear ${user.firstName}, kindly find your information below:`,
-            data: user
-        })
-    } catch (error) {
-        res.status(500).json(error.message)
-    }
-}
+//         const user = await FarmerModel.findOne({farmerID})
+//         if(!user){
+//             return res.status(404).json(`User not found.`)
+//         }
+//         res.status(200).json({
+//             message: `Dear ${user.firstName}, kindly find your information below:`,
+//             data: user
+//         })
+//     } catch (error) {
+//         res.status(500).json(error.message)
+//     }
+// }
 
 const logOut = async (req, res) => {
     try {
@@ -474,4 +474,4 @@ const uploadDP = async (req, res) => {
 
 
 
-module.exports = {farmerSignUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword,updateUser,uploadDP, changePassword, getOne, logOut}
+module.exports = {farmerSignUp, loginUser, verifyEmail, resendVerificationEmail, resetPassword, forgotPassword,updateUser,uploadDP, changePassword, logOut}

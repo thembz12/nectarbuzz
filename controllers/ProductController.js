@@ -29,8 +29,6 @@ const createProduct = async (req,res)=>{
         })}
 
         const file = req.file.path
-        console.log(req.file);
-        
         const photo = await cloudinary.uploader.upload(file)
         fs.unlink(file, (err) => {
           if (err) {
@@ -70,7 +68,7 @@ const createProduct = async (req,res)=>{
              if(users.length <= 0){
                 return res.status(404).json(`No available users`)
              }else{
-                res.status(200).json({message:`Kindly find the ${users.length} registered users & students below`, data: users})
+                res.status(200).json({message:`All product ${users.length} `, data: users})
              }
         
             } catch (error) {
@@ -165,7 +163,7 @@ const createProduct = async (req,res)=>{
                         const productDelete = await ProductModel.findByIdAndDelete(productID)
                         res.status(200).json({
                             status:"succesful",
-                            message:"all products below",
+                            message:"products deleted",
                         })
                         
                     } catch (error) {
@@ -181,21 +179,22 @@ const createProduct = async (req,res)=>{
                     try {
                         const userID = req.params.userID
                         const {honeyName, description, price}= req.body
-                        const productPoster = await ProductModel.findById({userID})
-                        if(!productPoster){
+                        const productUpdate = await ProductModel.findById({userID})
+                        if(!productUpdate){
                             return res.status(400).json({
-                                message: "farmer not founder"
+                                message: "product not founder"
                             })
                         }
                         const product = new ProductModel({
                             honeyName: honeyName.trim(),
                             description: description.trim(),
                             price,
-                            productPicture:image.secure_url
+                            
                         })
                         await product.save()
                         res.status(201).json({
-                            message:"product updated successfully"
+                            message:"product updated successfully",
+                            data:product
                         })
                         
                     } catch (error) {

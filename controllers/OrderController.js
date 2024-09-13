@@ -1,7 +1,7 @@
 const OrderModel = require('../models/OrderModel');
 const CartModel = require('../models/CartModel');
 const ProductModel = require('../models/ProductModel');
-
+const UserModel = require ("../models/UserModel")
 // Place an order (buyer)
 exports.placeOrder = async (req, res) => {
     const userID = req.user.userID;
@@ -26,7 +26,7 @@ exports.placeOrder = async (req, res) => {
 
         // Create the order
         const order = new OrderModel({
-            user: buyerId,
+            user: userID,
             orderItems,
             shippingAddress,
             paymentMethod,

@@ -1,5 +1,5 @@
 
-const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, logOut, farmerSignUp, updateUser, uploadDP} = require("../controllers/FarmerController")
+const { loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, logOut, farmerSignUp, updateUser, uploadDP} = require("../controllers/FarmerController")
 const { authorize, isAdmin } = require("../middleware/authentication")
 const express = require(`express`)
 const upload = require("../utils/multer")
@@ -11,7 +11,7 @@ router.post(`/farmer-signup`,FarmerSingUpValidator,farmerSignUp)
 
 router.post(`/farmer-login`,FarmerlogInValidator, loginUser)
 
-router.get(`/verify/farmer/:token`, verifyEmail)
+router.get(`/farmer-verify/:token`, verifyEmail)
 
 router.post(`/resend-verification/farmer`, resendVerificationEmail)
 
