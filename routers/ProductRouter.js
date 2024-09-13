@@ -12,9 +12,9 @@ router.get("/getone-product", getOne)
 
 router.get("/getall-product", getAll)
 
-router.get("/getall-approved-product",authorize,isAdmin, getAllApprovedPost)
+router.get("/getall-approved-product",authorize, getAllApprovedPost)
 
-router.get("/getall-pending-product",isAdmin, getAllPendingPost)
+router.get("/getall-pending-product",authorize, getAllPendingPost)
 
 router.get("/approved-product",isAdmin, approvedProduct)
 
