@@ -9,7 +9,7 @@ const customerSchema = new mongoose.Schema({
         entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
         return capitalize;},required:[true,'Kindly enter your fullname']},
     phoneNumber:{
-        type:Number,
+        type:String,
         require:true,
         unique:true,
     },
@@ -23,6 +23,7 @@ const customerSchema = new mongoose.Schema({
       type: String,
       require: true,
       unique: true,
+      trim:true
     },
     password: {
       type: String,

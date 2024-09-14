@@ -3,8 +3,8 @@ const ProductModel = require('../models/ProductModel');
 
 // Add product to cart
 exports.addToCart = async (req, res) => {
-    const userID = req.user.userID;
-    const { productID, quantity } = req.body;
+    const userID = req.params.userID;
+    const { productID, quantity, Price, total,honeyName } = req.body;
 
     try {
         const product = await ProductModel.findById(productID);
@@ -23,7 +23,7 @@ exports.addToCart = async (req, res) => {
             cart.items[itemIndex].quantity += quantity;
         } else {
             // If product does not exist, add new item
-            cart.items.push({ product: productID, quantity });
+            cart.items.push({ product: productID, quantity, honeyName, Price,total });
         }
 
         await cart.save();
@@ -51,11 +51,11 @@ exports.viewwCart = async (req, res) => {
 
 // Update item quantity in cart
 exports.updateCart = async (req, res) => {
-    const userID = req.user.userID;
+    const userID = req.params.userID;
     const { productID, quantity } = req.body;
 
     try {
-        const cart = await CartModel.findOne({ buyer: userID });
+        const cart = await CartModel.findOne({ user: userID });
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }

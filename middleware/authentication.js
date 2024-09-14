@@ -48,11 +48,11 @@ const authorize = async (req, res, next) => {
             message: error.message
         });
     }
-};
+}; 
 
 const isAdmin = async (req, res, next) => {
     try {
-      if (req.user.isAdmin) {
+      if (!req.user.isAdmin) {
         next();
       } else {
         res.status(403).json({ message: "Unauthorized: Not an admin" });

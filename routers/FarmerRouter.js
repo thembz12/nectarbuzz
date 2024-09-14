@@ -7,7 +7,7 @@ const { FarmerlogInValidator,FarmerSingUpValidator } = require("../middleware/va
 const router = express.Router()
 
 
-router.post(`/farmer-signup`,FarmerSingUpValidator,farmerSignUp)
+router.post(`/farmer-signup`,farmerSignUp)
 
 router.post(`/farmer-login`,FarmerlogInValidator, loginUser)
 

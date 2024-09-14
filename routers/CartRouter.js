@@ -3,9 +3,9 @@ const express = require ("express")
 
 const router = express.Router()
 
-router.post('/addtocart', addToCart)
+router.post('/addtocart/:userID', addToCart)
 
-router.post('/viewcart', viewwCart)
+router.get('/viewcart/:userID', viewwCart)
 
 router.post('/updatecart', updateCart)
 

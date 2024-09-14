@@ -33,8 +33,8 @@ const signUp = async (req, res) => {
             lastName: lastName.trim(),
             email:email.toLowerCase(),
             password: hashedPassword,
-            sex,
-            phoneNumber: phoneNumber,
+            sex:sex.trim(),
+            phoneNumber: phoneNumber.trim(),
             address: address.trim() 
         }); 
 
@@ -127,7 +127,7 @@ const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const existingUser = await UserModel.findOne({
-            email
+            email:email.toLowerCase().trim()
         });
         if (!existingUser) {
             return res.status(404).json({

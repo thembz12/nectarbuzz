@@ -31,8 +31,8 @@ const farmerSignUp = async (req, res) => {
             lastName: lastName.trim(),
             email:email.toLowerCase(),
             password: hashedPassword,
-            businessLicenseNo,
-            phoneNumber: phoneNumber,
+            businessLicenseNo:businessLicenseNo.trim(),
+            phoneNumber: phoneNumber.trim(),
             address: address.trim() 
         }); 
 

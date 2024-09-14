@@ -23,6 +23,7 @@ const cartSchema = new mongoose.Schema({
             type: Number,
             required: true
           },
+          
           Price: {
             type: Number,
             required: true
@@ -33,7 +34,7 @@ const cartSchema = new mongoose.Schema({
           },
           productPicture: {
             type: String,
-            required: true
+      
           }
     }],
     cashBack: {
