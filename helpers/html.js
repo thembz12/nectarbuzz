@@ -56,6 +56,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
+           <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
             <h1>Welcome To ECOHARVEST</h1>
           </div>
           <div class="content">
@@ -388,6 +389,181 @@ const signUpTemplate = (verifyLink, firstName) => {
       </html>
     `;
   };
+
   
-  module.exports = { signUpTemplate, verifyTemplate, forgotPasswordTemplate, changePasswordTemplate, signUpFarmerTemplate};
+function orderMailTemplate(firstName, orderId, orderDate, items, total) {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Reset some default styles for consistency */
+      body, p {
+        margin: 0;
+        padding: 0;
+      }
+  
+      /* Container styles */
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        font-family: Arial, sans-serif;
+      }
+  
+      /* Header styles */
+      .header {
+        text-align: center;
+        padding: 10px 0;
+      }
+  
+      /* Logo styles */
+      .logo {
+        max-width: 220px;
+        height: auto;
+      }
+  
+      /* Content styles */
+      .content {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f7f7f7;
+      }
+  
+      /* Order details styles */
+      .order-details {
+        margin-bottom: 20px;
+      }
+  
+      /* Footer styles */
+      .footer {
+        text-align: center;
+        padding: 10px 0;
+        background-color: #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
+        <h1>Order Confirmation</h1>
+      </div>
+      <div class="content">
+        <p>Dear ${firstName},</p>
+        <p>Your order has been successfully placed!</p>
+        <div class="order-details">
+          <h2>Order Details:</h2>
+          <p><strong>Order ID:</strong> ${orderId}</p>
+          <p><strong>Date:</strong> ${orderDate}</p>
+          <p><strong>Items:</strong></p>
+          <ul>
+            ${items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+          <p><strong>Total Amount:</strong> &#8358; ${total}</p>
+        </div>
+        <p>Thank you for choosing us for your meal!</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions, please contact us at chowfinder1@gmail.com.</p>
+      </div>
+    </div>
+  </body>
+  </html>
+  
+  `;
+}
+
+
+function restaurantOrderMailTemplate(fullname, email, address, orderId, orderDate, items, total) {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Reset some default styles for consistency */
+      body, p {
+        margin: 0;
+        padding: 0;
+      }
+  
+      /* Container styles */
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        font-family: Arial, sans-serif;
+      }
+  
+      /* Header styles */
+      .header {
+        text-align: center;
+        padding: 10px 0;
+      }
+  
+      /* Logo styles */
+      .logo {
+        max-width: 220px;
+        height: auto;
+      }
+  
+      /* Content styles */
+      .content {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f7f7f7;
+      }
+  
+      /* Order details styles */
+      .order-details {
+        margin-bottom: 20px;
+      }
+  
+      /* Footer styles */
+      .footer {
+        text-align: center;
+        padding: 10px 0;
+        background-color: #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
+        <h1>New Order Received</h1>
+      </div>
+      <div class="content">
+        <p>Dear Restaurant Team,</p>
+        <p>A new order has been placed by ${firstName} (${email}).</p>
+        <div class="order-details">
+          <h2>Order Details:</h2>
+          <p><strong>Order ID:</strong> ${orderId}</p>
+          <p><strong>Date:</strong> ${orderDate}</p>
+          <p><strong>Items:</strong></p>
+          <ul>
+            ${items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+          <p><strong>Total Amount:</strong> &#8358; ${total}</p>
+          <p><strong>Delivery Address:</strong> ${address}</p>
+        </div>
+        <p>Please prepare the order and contact the customer for delivery or pickup details.</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions, please contact the customer at their provided email address.</p>
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
+}
+
+  
+  module.exports = { signUpTemplate, verifyTemplate, forgotPasswordTemplate, changePasswordTemplate, orderMailTemplate, restaurantOrderMailTemplate, signUpFarmerTemplate};
   

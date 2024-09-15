@@ -2,8 +2,8 @@ const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
 const categoryModel = require ("../models/CategoriesModel")
 const cloudinary = require ("cloudinary")
-const path = require ("path")
 const fs = require ("fs")
+const { newCategory } = require("./CategoriesController")
 
 
 const createProduct = async (req,res)=>{
@@ -29,12 +29,15 @@ const createProduct = async (req,res)=>{
         })}
 
         const file = req.file.path
+        console.log(req.file);
+        
         const photo = await cloudinary.uploader.upload(file)
         fs.unlink(file, (err) => {
           if (err) {
             console.log("unable to delete.", err);
           }
         });
+        
         
         const Newproduct = await ProductModel.create({
             farmers : FarmerID, honeyName,
@@ -49,13 +52,15 @@ const createProduct = async (req,res)=>{
         farmerProduct.product.push(Newproduct._id);
         category.Products.push(Newproduct._id);
         
+        const updatedUser = await ProductModel.findByIdAndUpdate(farmerProduct, { new: true });
         
 
         await farmerProduct.save()
+        await updatedUser.save()
         await category.save()
         res.status(201).json({
             message:"product posted successfully and waiting for approval",
-            data:farmerProduct
+            data:Newproduct
         })
         
     } catch (error) {
@@ -74,7 +79,7 @@ const createProduct = async (req,res)=>{
             } catch (error) {
                 res.status(500).json({
                     status:"server error",
-                    errorMessage:error.message
+                    Message:error.message
                 })
                 
             }
@@ -97,7 +102,7 @@ const createProduct = async (req,res)=>{
                 }
                 
             } catch (error) {
-                res.status(500).json({ error: error.message });
+                res.status(500).json({ message: error.message });
             }
         };
 
@@ -118,7 +123,7 @@ const createProduct = async (req,res)=>{
                 }
                 
             } catch (error) {
-                res.status(500).json({ error: error.message });
+                res.status(500).json({ message: error.message });
             }
         };
         
@@ -138,7 +143,7 @@ const createProduct = async (req,res)=>{
                 await WhatToApprove.save()
                 res.status(200).json({message: `your ${WhatToApprove.productID}, is now an approved`, data: WhatToApprove})
             } catch (error) {
-                res.status(500).json(error.message)
+                res.status(500).json({message:error.message})
             }
         }
         const getOne = async (req,res)=>{
@@ -154,7 +159,7 @@ const createProduct = async (req,res)=>{
             } catch (error) {
                 res.status(500).json({
                     status:"server error",
-                    errorMessage:error.message
+                    Message:error.message
                 })}}
 
         
@@ -174,7 +179,7 @@ const createProduct = async (req,res)=>{
                     } catch (error) {
                         res.status(500).json({
                             status:"server error",
-                            errorMessage:error.message
+                            Message:error.message
                         })
                         
                     }
@@ -193,7 +198,7 @@ const createProduct = async (req,res)=>{
                         const product = new ProductModel({
                             honeyName: honeyName.trim(),
                             description: description.trim(),
-                            price,
+                            price:price.trim(),
                             
                         })
                         await product.save()
@@ -203,7 +208,7 @@ const createProduct = async (req,res)=>{
                         })
                         
                     } catch (error) {
-                        res.status(500).json(error.message)
+                        res.status(500).json({message:error.message})
                         }}
 
 module.exports = {createProduct, getOne, getAll, deleteProduct, updateProduct,approvedProduct,getAllApprovedPost, getAllPendingPost}

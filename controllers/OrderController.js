@@ -43,7 +43,7 @@ exports.placeOrder = async (req, res) => {
 
         res.status(201).json({ message: 'Order placed successfully', order: createdOrder });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -65,7 +65,7 @@ exports.getAllOrders = async (req, res) => {
         const orders = await OrderModel.find({}).populate('buyer', 'firstName lastName email');
         res.status(200).json(orders);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -85,7 +85,7 @@ exports.updateOrderStatus = async (req, res) => {
 
         res.status(200).json({ message: 'Order status updated', order });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -106,6 +106,6 @@ exports.markAsPaid = async (req, res) => {
 
         res.status(200).json({ message: 'Order marked as paid', order });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

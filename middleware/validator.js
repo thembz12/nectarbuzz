@@ -153,6 +153,11 @@ exports.FarmerSingUpValidator = async (req, res, next) => {
       "string.min": "the minium name must be at least 3 character long",
       "string.pattern.base": "firstName should only contain letters",
     }),
+    sex:joiValidation.string().trim().required().valid("male","female").messages({
+      "any.only": "Sex must be either 'male' or 'female'.",
+      "string.empty": "Sex is required.",
+      "any.required": "Sex is required."
+    }),
     //     //age:joiValidation.number().required().integer(),
     //     //sex:joiValidation.string().required().valid("male","female"),
         phoneNumber:joiValidation.string().trim().regex(/^\d{11}$/)

@@ -23,7 +23,7 @@ router.post(`/change-password/:token`, changePassword)
 
 router.post(`/reset-password/:token`, resetPassword)
 
-router.post(`/update-profilepicture/:token`,upload.single('profilePicture'), updatePicture)
+router.put(`/update-profilepicture/:token`,upload.single('profilePicture'), updatePicture)
 
 router.get(`/getone/:userID`,authorize, getOne)
 
@@ -31,7 +31,7 @@ router.get(`/getonefarmer/:farmerID`,authorize, getOneFarmer)
 
 router.get(`/getallfarmers/`,authorize, getAllFarmers)
 
-router.get(`/getall/:userID`,authorize, getAll)
+router.get(`/getall/`,authorize, getAll)
 
 router.post(`/make-admin/:userID`,authorize, isAdmin, makeAdmin)
 

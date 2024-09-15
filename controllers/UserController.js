@@ -519,6 +519,8 @@ const updateUser = async (req, res) => {
 
   const updatePicture = async (req, res) => {
     try { 
+
+        const userID = req.params.userID
       // Extract token from headers
       const token = req.headers.authorization.split(" ")[1];
   
@@ -532,7 +534,7 @@ const updateUser = async (req, res) => {
         if (error) {
           return res.status(400).json({ message: "Could not authenticate" });
         } else {
-          const userID = decodedUser.id;
+          //const userID = decodedUser.id;
   
           // Find user to get the current profile picture
           const user = await UserModel.findById(userID);
