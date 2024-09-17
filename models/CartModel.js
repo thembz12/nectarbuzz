@@ -21,16 +21,16 @@ const cartSchema = new mongoose.Schema({
           },
           total: {
             type: Number,
-            required: true
+            
           },
           
           Price: {
             type: Number,
-            required: true
+          
           },
           honeyName: {
             type: String,
-            required: true
+            
           },
           productPicture: {
             type: String,
