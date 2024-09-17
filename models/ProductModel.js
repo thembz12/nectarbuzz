@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema({
        default: "pending",
     },
     productPicture: {
-      pictureUrl: { type: String},
+      type: String
     },
     farmers: {
       type: mongoose.Schema.Types.ObjectId,

@@ -29,8 +29,6 @@ const createProduct = async (req,res)=>{
         })}
 
         const file = req.file.path
-        console.log(req.file);
-        
         const photo = await cloudinary.uploader.upload(file)
         fs.unlink(file, (err) => {
           if (err) {
@@ -52,11 +50,11 @@ const createProduct = async (req,res)=>{
         farmerProduct.product.push(Newproduct._id);
         category.Products.push(Newproduct._id);
         
-        const updatedUser = await ProductModel.findByIdAndUpdate(farmerProduct, { new: true });
+       // const updatedUser = await ProductModel.findByIdAndUpdate(farmerProduct, { new: true });
         
 
         await farmerProduct.save()
-        await updatedUser.save()
+        //await updatedUser.save()
         await category.save()
         res.status(201).json({
             message:"product posted successfully and waiting for approval",

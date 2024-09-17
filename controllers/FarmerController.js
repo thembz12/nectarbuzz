@@ -14,7 +14,7 @@ const farmerSignUp = async (req, res) => {
     try {
         
             const {firstName, lastName, email, password, sex,  businessLicenseNo, address, phoneNumber} = req.body;
-            if(!firstName || !lastName || !email || !password || !sex || ! businessLicenseNo || !address || !phoneNumber ){
+            if(!firstName || !lastName || !email || !password  || !sex|| !businessLicenseNo || !address || !phoneNumber ){
                return res.status(400).json(`Please enter all fields.`)
            }
        
@@ -33,8 +33,8 @@ const farmerSignUp = async (req, res) => {
             password: hashedPassword,
             businessLicenseNo:businessLicenseNo.trim(),
             phoneNumber: phoneNumber.trim(),
-            sex:sex.trim(),
-            address: address.trim() 
+            address: address.trim(), 
+            sex:sex.trim()
         }); 
 
             const userToken = jwt.sign(

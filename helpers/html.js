@@ -5,7 +5,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome tO ECOHARVEST!</title>
+        <title>Welcome tO NECTAR-BUZZ!</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -56,8 +56,8 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-           <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
-            <h1>Welcome To ECOHARVEST</h1>
+           <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+            <h1>Welcome To NECTAR-BUZZ </h1>
           </div>
           <div class="content">
             <p>Hello ${firstName},</p>
@@ -67,10 +67,10 @@ const signUpTemplate = (verifyLink, firstName) => {
               <a href="${verifyLink}" class="button">Verify My Account</a>
             </p>
             <p>If you did not create an account, please ignore this email.</p>
-            <p>Best regards,<br>ECOHARVEST Team</p>
+            <p>Best regards,<br>NECTAR-BUZZ Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} ECOHARVEST Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} NECTAR-BUZZ Corp. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -78,14 +78,14 @@ const signUpTemplate = (verifyLink, firstName) => {
     `;
   };
 
-  const signUpFarmerTemplate = (verifyLink, fullName) => {
+  const signUpFarmerTemplate = (verifyLink, firstName) => {
     return `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome tO ECOHARVEST!</title>
+        <title>Welcome tO NECTAR-BUZZ!</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -136,20 +136,21 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Welcome To ECOHARVEST</h1>
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+            <h1>Welcome To NECTAR-BUZZ</h1>
           </div>
           <div class="content">
-            <p>Hello ${fullName},</p>
+            <p>Hello ${firstName},</p>
             <p>Thank you for joining our community! We're thrilled to have you on board.</p>
             <p>Please click the button below to verify your account:</p>
             <p>
               <a href="${verifyLink}" class="button">Verify My Account</a>
             </p>
             <p>If you did not create an account, please ignore this email.</p>
-            <p>Best regards,<br>ECOHARVEST Team</p>
+            <p>Best regards,<br>NECTAR-BUZZ Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} ECOHARVEST Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} NECTAR-BUZZ Corp. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -165,7 +166,7 @@ const signUpTemplate = (verifyLink, firstName) => {
   <html>
   <head>
       <meta charset="UTF-8">
-      <title>Welcome To ECOHARVEST</title>
+      <title>Welcome To NECTAR-BUZZ</title>
       <style>
       body {
         font-family: Arial, sans-serif;
@@ -216,6 +217,7 @@ const signUpTemplate = (verifyLink, firstName) => {
     <body>
       <div class="container">
         <div class="header">
+        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
           <h1>Verify Your Account</h1>
         </div>
         <div class="content">
@@ -225,10 +227,10 @@ const signUpTemplate = (verifyLink, firstName) => {
             <a href="${verifyLink}" class="button">Verify My Account</a>
           </p>
           <p>If you did not create an account, please ignore this email.</p>
-          <p>Best regards,<br>ECOHARVEST Team</p>
+          <p>Best regards,<br>NECTAR-BUZZ Team</p>
         </div>
         <div class="footer">
-          <p>&copy; ${new Date().getFullYear()}ECOHARVEST Corp. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()}NECTAR-BUZZ Corp. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -293,6 +295,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
             <h1>Reset Your Password</h1>
           </div>
           <div class="content">
@@ -302,10 +305,10 @@ const signUpTemplate = (verifyLink, firstName) => {
             <p>
               <a href="${resetLink}" class="button">Reset Password</a>
             </p>
-            <p>Best regards,<br>ECOHARVEST Team</p>
+            <p>Best regards,<br>NECTAR-BUZZ Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()}ECOHARVEST Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()}NECTAR-BUZZ Corp. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -371,6 +374,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
             <h1>Reset Your Password</h1>
           </div>
           <div class="content">
@@ -379,10 +383,10 @@ const signUpTemplate = (verifyLink, firstName) => {
             <p>
               <a>Password Changed</a>
             </p>
-            <p>Best regards,<br>ECOHARVEST Team</p>
+            <p>Best regards,<br>NECTAR-BUZZ Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()}ECOHARVEST Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()}NECTAR-BUZZ Corp. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -449,7 +453,7 @@ function orderMailTemplate(firstName, orderId, orderDate, items, total) {
   <body>
     <div class="email-container">
       <div class="header">
-        <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
+        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
         <h1>Order Confirmation</h1>
       </div>
       <div class="content">
@@ -468,7 +472,7 @@ function orderMailTemplate(firstName, orderId, orderDate, items, total) {
         <p>Thank you for choosing us for your meal!</p>
       </div>
       <div class="footer">
-        <p>If you have any questions, please contact us at chowfinder1@gmail.com.</p>
+        <p>If you have any questions, please contact us at nectarbuzz1@gmail.com.</p>
       </div>
     </div>
   </body>

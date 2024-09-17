@@ -25,14 +25,6 @@ const customerSchema = new mongoose.Schema({
       unique: true,
       trim:true
     },
-    sex:{type:String,
-      set: (entry) => {
-        const capitalize =
-        entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
-          return capitalize;},
-        enum: ["Male", "Female"],
-        required:true
-    },
     password: {
       type: String,
       require: true,
