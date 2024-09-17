@@ -3,7 +3,7 @@ const express = require ("express")
 
 const router = express.Router()
 
-router.post('/addtocart/:userID', addToCart)
+router.post('/addtocart/', addToCart)
 
 router.get('/viewcart/:userID', viewwCart)
 

@@ -4,7 +4,7 @@ const ProductModel = require('../models/ProductModel');
 // Add product to cart
 exports.addToCart = async (req, res) => {
     const userID = req.params.userID;
-    const { productID, quantity, Price, total,honeyName } = req.body;
+    const { productID, quantity } = req.body;
 
     try {
         const product = await ProductModel.findById(productID);
@@ -23,7 +23,7 @@ exports.addToCart = async (req, res) => {
             cart.items[itemIndex].quantity += quantity;
         } else {
             // If product does not exist, add new item
-            cart.items.push({ product: productID, quantity, honeyName, Price,total });
+            cart.items.push({ product: productID, quantity });
         }
 
         await cart.save();
