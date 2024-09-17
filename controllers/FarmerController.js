@@ -20,7 +20,8 @@ const farmerSignUp = async (req, res) => {
        
         const emailExist = await FarmerModel.findOne({ email });
         if (emailExist) {
-            return res.status(400).json(`User with email already exist.`);
+            return res.status(400).json({
+                mesaage:"User with email already exist."});
         } else {
         const saltedPassword = await bcrypt.genSalt(10);
         //perform an encrytion of the salted password

@@ -10,6 +10,7 @@ const createProduct = async (req,res)=>{
     try { 
         const categoryID = req.params.categoryID
         const FarmerID = req.params.farmerID
+        const productID = req.params.productID
         const {honeyName, description, price}= req.body
         // if(!honeyName || !description || !price){
         //     return res.status(400).json({message:"enter all fields"})
@@ -27,6 +28,14 @@ const createProduct = async (req,res)=>{
         return res.status(401).json({
           message: "Category not found",
         })}
+
+        const product = await ProductModel.findById(productID);
+        if (product.productStatus = "pending") {
+          return res.status(401).json({
+            message: "product is not approved yet",
+          })}
+
+
 
         const file = req.file.path
         const photo = await cloudinary.uploader.upload(file)
@@ -67,11 +76,12 @@ const createProduct = async (req,res)=>{
 
         const getAll = async(req,res)=>{
             try {
-             const users = await ProductModel.find()
-             if(users.length <= 0){
-                return res.status(404).json(`No available users`)
+             const product = await ProductModel.find()
+             if(product.length <= 0 ){
+                return res.status(404).json(`No available products`)
+
              }else{
-                res.status(200).json({message:`All product ${users.length} `, data: users})
+                res.status(200).json({message:`All product ${product.length} `, data: product})
              }
         
             } catch (error) {
