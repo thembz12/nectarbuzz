@@ -13,6 +13,14 @@ const customerSchema = new mongoose.Schema({
         require:true,
         unique:true,
     },
+    sex:{type:String,
+      set: (entry) => {
+        const capitalize =
+        entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
+          return capitalize;},
+        enum: ["Male", "Female"],
+        required:true
+    },
     address:{type:String,set: (entry) => {
       const capitalize =
       entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
