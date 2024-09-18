@@ -2,113 +2,107 @@ const OrderModel = require('../models/OrderModel');
 const CartModel = require('../models/CartModel');
 const ProductModel = require('../models/ProductModel');
 const UserModel = require ("../models/UserModel")
-// Place an order (buyer)
-// exports.placeOrder = async (req, res) => {
-//     const userID = req.user.userID;
-//     const { shippingAddress, paymentMethod } = req.body;
+const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const OrderModel = require('./models/Order');
+const UserModel = require('./models/User');
+const CartModel = require('./models/Cart');
 
-//     try {
-//         // Find buyer's cart
-//         const cart = await CartModel.findOne({ user: userID }).populate('items.product');
-//         if (!cart || cart.items.length === 0) {
-//             return res.status(400).json({ message: 'Cart is empty' });
-//         }
+// // Nodemailer transporter configuration
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // Replace with your email service
+//   auth: {
+//     user: 'your-email@gmail.com',  // Your email
+//     pass: 'your-email-password'    // Your email password
+//   }
+// });
 
-//         // Calculate total price
-//         const orderItems = cart.items.map(item => ({
-//             product: item.product._id,
-//             name: item.product.name,
-//             quantity: item.quantity,
-//             price: item.product.price
-//         }));
-
-//         const totalPrice = cart.items.reduce((acc, item) => acc + (item.quantity * item.product.price), 0);
-
-//         // Create the order
-//         const order = new OrderModel({
-//             user: userID,
-//             orderItems,
-//             shippingAddress,
-//             paymentMethod,
-//             totalPrice,
-//             isPaid: false,
-//         });
-
-//         // Save the order
-//         const createdOrder = await order.save();
-
-//         // Clear the cart after placing an order
-//         cart.items = [];
-//         await cart.save();
-
-//         res.status(201).json({ message: 'Order placed successfully', order: createdOrder });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
+// // Create order function
+// async function createOrder(userId) {
+//   try {
+//     // 1. Get the user's cart
+//     const cart = await CartModel.findOne({ user: userId, isCheckedOut: false }).populate('items.product');
+//     if (!cart || cart.items.length === 0) {
+//       throw new Error('Cart is empty. Please add items to the cart.');
 //     }
-// };
 
-// const OrderModel = require('./models/OrderModel'); // Adjust the path to your Order model
-// const CartModel = require('./models/CartModel'); // Adjust the path to your Cart model
-// const UserModel = require('./models/UserModel'); // Adjust the path to your User model
-// const nodemailer = require('nodemailer');
+//     // 2. Calculate total price using cart's `calculateTotalPrice` method
+//     const totalPrice = cart.calculateTotalPrice();
 
- exports.checkout = async (req, res) => {
-  try {
-    const { userId, customerName, customerAddress, cashBackUsed } = req.body;
+//     // 3. Fetch the user details
+//     const user = await UserModel.findById(userId);
+//     if (!user) {
+//       throw new Error('User not found.');
+//     }
 
-    // Fetch the cart for the user
-    const userCart = await CartModel.findOne({ user: userId }).populate('items.product');
-    if (!userCart) {
-      return res.status(404).json({ message: "Cart not found for this user." });
-    }
+//     // 4. Create the order from the cart
+//     const orderData = {
+//       user: userId,
+//       items: cart.items.map(item => ({
+//         product: item.product._id,
+//         honeyName: item.honeyName,
+//         quantity: item.quantity,
+//         price: item.price,
+//         productPicture: item.productPicture
+//       })),
+//       totalAmount: totalPrice,
+//       customerFirstName: user.firstName,
+//       customerLastName: user.lastName,
+//       customerAddress: user.address,
+//       customerPhoneNumber: user.phoneNumber,
+//       city: 'Lagos', // Assuming city and country are predefined
+//       country: 'Nigeria',
+//       orderStatus: 'Processing'
+//     };
+//     const order = new OrderModel(orderData);
+//     await order.save();
 
-    // Calculate the total cost and cashback
-    const cartItems = userCart.items;
-    const grandTotal = cartItems.reduce((total, item) => total + item.total, 0);
-    const cashbackEarned = grandTotal * 0.02; // 2% cashback
+//     // 5. Calculate and credit 2% cashback to the user's account
+//     const cashback = totalPrice * 0.02;
+//     user.cashBack = (user.cashBack || 0) + cashback;
+//     await user.save();
 
-    // Fetch the user to update their cashback
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
+//     // 6. Mark the cart as checked out
+//     cart.isCheckedOut = true;
+//     await cart.save();
 
-    // Apply used cashback and update the user's total cashback
-    user.cashback = (user.cashback || 0) + cashbackEarned - (cashBackUsed || 0);
+//     // 7. Send email to the user
+//     const userMailOptions = {
+//       from: 'your-email@gmail.com',
+//       to: user.email,
+//       subject: 'Order Confirmation',
+//       text: `Dear ${user.firstName},\n\nThank you for your order!\nTotal Amount: ${totalPrice}\nYou have earned a cashback of ${cashback.toFixed(2)}.\n\nRegards, Your Company`
+//     };
+//     await transporter.sendMail(userMailOptions);
 
-    // Create the order based on cart contents
-    const newOrder = new OrderModel({
-      user: userId,
-      total: grandTotal,
-      customerName,
-      customerAddress,
-      cashBackUsed: cashBackUsed || 0,
-      isPaid: false,
-      orderDate: Date.now(),
-    });
+//     // 8. Send email to the admin
+//     const adminMailOptions = {
+//       from: 'your-email@gmail.com',
+//       to: 'admin-email@example.com',  // Admin email
+//       subject: 'New Order Received',
+//       text: `A new order has been placed by ${user.firstName} ${user.lastName}.\nOrder ID: ${order._id}\nTotal Amount: ${totalPrice}`
+//     };
+//     await transporter.sendMail(adminMailOptions);
 
-    // Save the new order and updated user data
-    await newOrder.save();
-    await user.save();
+//     // 9. Return the created order
+//     return { success: true, order };
 
-    // Send email notification to the user and admin
-    await sendEmailNotification(user.email, customerName, grandTotal, cashbackEarned, newOrder._id);
+//   } catch (error) {
+//     console.error('Error creating order:', error);
+//     return { success: false, message: error.message };
+//   }
+// }
 
-    // Clear the cart (if you want to clear it after checkout)
-    await CartModel.deleteOne({ user: userId });
-
-    // Return success response
-    res.status(201).json({
-      message: "Order successfully created!",
-      order: newOrder,
-      cashbackEarned,
-    });
-
-  } catch (error) {
-    console.error("Error processing checkout:", error);
-    res.status(500).json({ message: "An error occurred during checkout.", error: error.message });
-  }
-};
+// // Sample usage
+// createOrder('user-id')  // Replace 'user-id' with an actual user ID from your database
+//   .then(response => {
+//     if (response.success) {
+//       console.log('Order created successfully:', response.order);
+//     } else {
+//       console.log('Order creation failed:', response.message);
+//     }
+//   })
+//   .catch(error => console.error('Unexpected error:', error));
 
 
 // Get all orders for the buyer
@@ -123,33 +117,33 @@ exports.getMyOrders = async (req, res) => {
     }
 };
 
-// Get all orders for the admin (admin access)
-exports.getAllOrders = async (req, res) => {
+
+const getAllOrders = async (req, res) => {
     try {
-        const orders = await OrderModel.find({}).populate('buyer', 'firstName lastName email');
+        const userId = req.user ? req.user._id : null;
+  
+        // Find the user from the database
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+  
+        // Find all orders for the user
+        const orders = await Order.find({ _id: { $in: user.orders } })
+            .sort({ orderDate: -1 })
+            .populate("items");
+        
+        // Check if orders are empty
+        if (orders.length === 0) {
+            return res.status(200).json({ message: 'No orders found for this user.' });
+        }
+  
+        // Return orders if they exist
         res.status(200).json(orders);
     } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// Update order status (admin access)
-exports.updateOrderStatus = async (req, res) => {
-    const orderID = req.params.orderID;
-    const { status } = req.body;
-
-    try {
-        const order = await OrderModel.findById(orderID);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        order.status = status;
-        await order.save();
-
-        res.status(200).json({ message: 'Order status updated', order });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: error.message
+        });
     }
 };
 
@@ -173,3 +167,8 @@ exports.markAsPaid = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+module.exports = {
+    getAllOrders
+}

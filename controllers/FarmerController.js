@@ -13,7 +13,7 @@ const {
 const farmerSignUp = async (req, res) => {
     try {
         
-            const {firstName, lastName, email, password, sex,  businessLicenseNo, address, phoneNumber} = req.body;
+            const {firstName, lastName, email, password, sex,  businessLicenseNo, phoneNumber} = req.body;
             if(!firstName || !lastName || !email || !password  || !sex|| !businessLicenseNo || !address || !phoneNumber ){
                return res.status(400).json(`Please enter all fields.`)
            }
@@ -21,7 +21,7 @@ const farmerSignUp = async (req, res) => {
         const emailExist = await FarmerModel.findOne({ email });
         if (emailExist) {
             return res.status(400).json({
-                mesaage:"User with email already exist."});
+                message:"User with email already exist."});
         } else {
         const saltedPassword = await bcrypt.genSalt(10);
         //perform an encrytion of the salted password
@@ -33,8 +33,7 @@ const farmerSignUp = async (req, res) => {
             email:email.toLowerCase(),
             password: hashedPassword,
             businessLicenseNo:businessLicenseNo.trim(),
-            phoneNumber: phoneNumber.trim(),
-            address: address.trim(), 
+            phoneNumber: phoneNumber.trim(), 
             sex:sex.trim()
         }); 
 

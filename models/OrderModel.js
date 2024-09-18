@@ -1,36 +1,72 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-  user: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Users', 
-    required: true 
-  }],
-  total: { 
-    type: Number, 
-    required: true 
-  },
-  customerName: { 
-    type: String, 
-    required: true 
-  },
-  customerAddress: { 
-    type: String, 
-    required: true 
-  },
-  cashBackUsed: { 
-    type: Number, 
-    default: 0 
-  },
-  isPaid: { 
-    type: Boolean, 
-    default: false 
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
 },
-  orderDate: { 
-    type: Date, 
-    default: Date.now()
-  }
-});
+  items: [{
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+    },
+    honeyName:{
+      type: String,
+      required: true
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        default: 1
+    },
+    price:{
+        type: String,
+        required: true
+    },
+    productPicture:{
+        type: String
+    },
+}],
+  totalAmount: {
+      type: Number,
+  },
+  customerFirstName: {
+      type: String,
+      required: true
+  },
+  customerLastName: {
+      type: String,
+      required: true
+  },
+  customerAddress:{
+    type: String,
+    required: true
+  },
+  customerPhoneNumber: {
+    type: String
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  country: {
+    type: String,
+    default: 'Nigeria'
+  },
+  orderStatus: {
+    type: String,
+    enum: ['Processing', 'Delivered'],
+    default: 'Processing'
+  },
+  orderDate: {
+    type: Date,
+    default: Date.now
+ }
+  
+}, { timestamps: true });
+
 
 const OrderModel = mongoose.model('Order', OrderSchema);
 
