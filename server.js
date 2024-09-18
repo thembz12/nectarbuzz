@@ -5,6 +5,7 @@ const router = require ("./routers/UserRouter.js")
 const FarmerRouter = require ("./routers/FarmerRouter.js")
 const CategoriesRouter = require ("./routers/CategoriesModel.js")
 const cartRouter = require ("./routers/CartRouter.js")
+
 const app = express()
 const cors = require ("cors")
 app.use(cors({origin: "*"}))
@@ -16,6 +17,7 @@ app.use("/api/v1/",FarmerRouter)
 app.use("/api/v1",ProductRouter)
 app.use("/api/v1",CategoriesRouter)
 app.use("/api/v1",cartRouter)
+
 
 
 
