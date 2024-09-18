@@ -482,7 +482,7 @@ function orderMailTemplate(firstName, orderId, orderDate, items, total) {
 }
 
 
-function restaurantOrderMailTemplate(fullname, email, address, orderId, orderDate, items, total) {
+function restaurantOrderMailTemplate(firstName, email, address, orderId, orderDate, items, total) {
   return `
   <!DOCTYPE html>
   <html lang="en">

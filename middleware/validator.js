@@ -204,10 +204,9 @@ exports.logInValidator = async (req, res, next) => {
       .required()
       .min(8)
       .max(50)
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/)
       .messages({
-        "string.pattern.base":
-          "incorrect password",
+        "string.pattern.base":"incorrect password",
         "string.empty": "Password cannot be empty",
         "any.required": "please provide your password",
       }),
@@ -236,8 +235,7 @@ exports.FarmerlogInValidator = async (req, res, next) => {
       .max(50)
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
       .messages({
-        "string.pattern.base":
-          "incorrect password",
+        "string.pattern.base":"incorrect password",
         "string.empty": "Password cannot be empty",
         "any.required": "please provide your password",
       }),

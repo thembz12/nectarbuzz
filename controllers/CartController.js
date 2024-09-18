@@ -11,7 +11,7 @@ const formatter = new Intl.NumberFormat('en-NG', {
 const addToCart = async (req, res) => {
     try {
         const { productID, quantity } = req.body;
-        
+        const qty = Number(quantity)
         // Ensure user is authenticated and extract the userId from req.user
         const userId =  req.user._id; 
         
@@ -20,7 +20,7 @@ const addToCart = async (req, res) => {
         }
 
         // Ensure valid quantity is provided
-        if (!quantity || quantity <= 0) {
+        if (!qty || qty <= 0) {
             return res.status(400).json({ message: "Quantity must be a positive number." });
         }
 
@@ -45,21 +45,21 @@ const addToCart = async (req, res) => {
 
         if (itemIndex > -1) {
             // If the product exists in the cart, update the quantity
-            cart.items[itemIndex].quantity += quantity;
+            cart.items[itemIndex].quantity += qty;
         } else {
             // If the product doesn't exist, add it to the cart
             cart.items.push({
                 product: productID,
                 honeyName: product.honeyName,
                 quantity,
-                price: product.price,
+                price: Number(product.price),
                 productPicture: product.productPicture,
                 farmers: product.farmers
             });
         }
 
         // Recalculate the total price of the cart
-        cart.totalPrice = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        cart.totalPrice = cart.items.reduce((acc, item) =>Number (acc )+Number (item.quantity) *Number (item.price), 0);
 
         // Save the cart back to the database
         await cart.save();
@@ -125,7 +125,8 @@ const viewCart = async (req, res) => {
         }
 
         const { productID, quantity } = req.body;
-        if (!quantity || quantity <= 0) {
+        const qty = parseInt(quantity);
+        if (!qty || qty <= 0) {
             return res.status(400).json({ message: "Quantity must be a positive number." });
         }
 
@@ -140,10 +141,10 @@ const viewCart = async (req, res) => {
         }
 
         // Increase the item quantity
-        cart.items[itemIndex].quantity += quantity;
+        cart.items[itemIndex].quantity += qty;
 
         // Recalculate the total price
-        cart.totalPrice = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        cart.totalPrice = cart.items.reduce((acc, item) => acc + item.qty * item.price, 0);
 
         await cart.save();
 

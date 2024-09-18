@@ -29,41 +29,12 @@ let mailOptions = {
   html:options.html
 //   
 }
+
   await transporter.sendMail(mailOptions)
 
 }
 
-const sendEmailNotification = async (userEmail, customerName, grandTotal, cashbackEarned, orderId) => {
-  try {
 
-    // Email content for the user
-    const userMailOptions = {
-      from: process.env.mail_id,
-      to: options.email,
-      subject: options.subject,
-      // text: options.message
-    html:options.html
-    };
-
-    // Email content for the admin
-    const adminMailOptions = {
-      from: process.env.ADMIN_EMAIL, // Sender address
-      to: process.env.ADMIN_EMAIL, // Admin's email
-      subject: 'New Order Received',
-      text: `A new order has been placed by ${customerName}.\nOrder total: $${grandTotal}.\nOrder ID: ${orderId}.\nCashback earned by the user: $${cashbackEarned.toFixed(2)}.\n\nPlease review and process the order.`
-    };
-
-    // Send email to the user
-    await transporter.sendMail(userMailOptions);
-
-    // Send email to the admin
-    await transporter.sendMail(adminMailOptions);
-
-    console.log('Emails sent to user and admin successfully.');
-  } catch (error) {
-    console.error('Error sending email notifications:', error);
-  }
-};
 
 
 

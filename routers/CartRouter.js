@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post('/addtocart/',authenticate, addToCart)
 
-router.get('/viewcart/',viewCart)
+router.get('/viewcart/',authenticate, viewCart)
 
 router.post('/updatecart', reduceItemQuantity)
 
