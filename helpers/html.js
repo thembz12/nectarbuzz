@@ -568,6 +568,10 @@ function restaurantOrderMailTemplate(fullname, email, address, orderId, orderDat
   `;
 }
 
+// Function to send email notification to the user and admin
+const sendEmailNotification = async (userEmail, customerName, grandTotal, cashbackEarned, orderId) => {
+  try {
+
   
   module.exports = { signUpTemplate, verifyTemplate, forgotPasswordTemplate, changePasswordTemplate, orderMailTemplate, restaurantOrderMailTemplate, signUpFarmerTemplate};
   

@@ -14,7 +14,7 @@ const farmerSignUp = async (req, res) => {
     try {
         
             const {firstName, lastName, email, password, sex,  businessLicenseNo, phoneNumber} = req.body;
-            if(!firstName || !lastName || !email || !password  || !sex|| !businessLicenseNo || !address || !phoneNumber ){
+            if(!firstName || !lastName || !email || !password  || !sex|| !businessLicenseNo || !phoneNumber ){
                return res.status(400).json(`Please enter all fields.`)
            }
        

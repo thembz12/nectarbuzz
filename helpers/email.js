@@ -1,5 +1,6 @@
 
 
+const { options } = require("@hapi/joi")
 const nodeMailer = require(`nodemailer`) 
 
 require ("dotenv").config()
@@ -32,24 +33,23 @@ let mailOptions = {
 
 }
 
-// Function to send email notification to the user and admin
-const sendEmailNotification = async (userEmail, customerName, grandTotal, cashbackEarned, orderId) => {
-  try {
+
     // Configure the transporter for nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail', // Use your email service provider
       auth: {
-        user: process.env.ADMIN_EMAIL, // Admin email (environment variable)
-        pass: process.env.ADMIN_EMAIL_PASSWORD // Admin email password (environment variable)
+        user:process.env.mail_id, // Admin email (environment variable)
+        pass:process.env.mail_password // Admin email password (environment variable)
       }
     });
 
     // Email content for the user
     const userMailOptions = {
-      from: process.env.ADMIN_EMAIL, // Sender address
-      to: userEmail, // Recipient (user's email)
-      subject: 'Order Confirmation with Cashback',
-      text: `Hello ${customerName},\n\nThank you for your order!\nYour order total is $${grandTotal}.\nOrder ID: ${orderId}.\nYou have earned a cashback of $${cashbackEarned.toFixed(2)}.\n\nBest regards,\nYour Company`
+      from: process.env.mail_id,
+      to: options.email,
+      subject: options.subject,
+      // text: options.message
+    html:options.html
     };
 
     // Email content for the admin
