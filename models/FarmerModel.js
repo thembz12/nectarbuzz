@@ -21,12 +21,7 @@ const customerSchema = new mongoose.Schema({
         enum: ["Male", "Female"],
         required:true
     },
-    address:{type:String,set: (entry) => {
-      const capitalize =
-      entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
-        return capitalize;},required:[true,'Kindly enter your address'],
-        required:true
-    },
+
     email: {
       type: String,
       require: true,
