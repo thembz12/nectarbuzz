@@ -1,6 +1,6 @@
 const express = require ("express")
 const { createProduct, getAll, getAllApprovedPost, getAllPendingPost, approvedProduct, getOne } = require("../controllers/ProductController")
-const { authorize, isAdmin } = require("../middleware/authentication")
+const { authorize, isAdmin, authenticate } = require("../middleware/authentication")
 const upload = require("../utils/multer")
 
 const router = express.Router()
@@ -12,7 +12,7 @@ router.get("/getone-product", getOne)
 
 router.get("/getall-product", getAll)
 
-router.get("/getall-approved-product",authorize, getAllApprovedPost)
+router.get("/getall-approved-product",authenticate, getAllApprovedPost)
 
 router.get("/getall-pending-product",authorize, getAllPendingPost)
 
