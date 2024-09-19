@@ -14,7 +14,7 @@ router.get("/getall-product", getAll)
 
 router.get("/getall-approved-product",authenticate, getAllApprovedPost)
 
-router.get("/getall-pending-product",authorize, getAllPendingPost)
+router.get("/getall-pending-product", authenticate, getAllPendingPost)
 
 router.post("/approved-product/:productID",authorize, approvedProduct)
 
