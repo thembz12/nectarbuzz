@@ -55,7 +55,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       </head>
       <body>
         <div class="container">
-          <div class="header">
+          n<div class="header">
            <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
             <h1>Welcome To NECTAR-BUZZ </h1>
           </div>

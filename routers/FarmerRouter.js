@@ -13,17 +13,17 @@ router.post(`/farmer-login`,FarmerlogInValidator, loginUser)
 
 router.get(`/farmer-verify/:token`, verifyEmail)
 
-router.post(`/resend-verification/farmer`, resendVerificationEmail)
+router.post(`/farmer-resend-verification/farmer`, resendVerificationEmail)
 
-router.put(`/update-user/farmer/:userID`, upload.single('profilePicture'), updateUser)
+router.put(`/farmer-update-user/:userID`, upload.single('profilePicture'), updateUser)
 
-router.post(`/forgot-password/farmer`, forgotPassword)
+router.post(`/farmer-forgot-password/`, forgotPassword)
 
-router.post(`/change-passwordfarmer/farmer/:token`, changePassword)
+router.post(`/farmer-change-passwordfarmer/:token`, changePassword)
 
-router.post(`/reset-password/farmer/:token`, resetPassword)
+router.post(`/farmer-reset-password/:token`, resetPassword)
 
-router.post(`/update-profilepicture/farmer/:token`, uploadDP)
+router.post(`/farmer-update-profilepicture/:token`, uploadDP)
 
 router.post(`/log-out`, logOut)
 

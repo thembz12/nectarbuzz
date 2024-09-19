@@ -23,7 +23,7 @@ const newCategory = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             error: 'Error creating category',
-            details: error.message
+            message: error.message
         });
     }
 };
@@ -42,7 +42,7 @@ const getAllCategories = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             error: 'Error retrieving categories',
-            details: error.message
+            message: error.message
         });
     }
 };
@@ -62,7 +62,7 @@ const oneCategory = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             error: 'Error retrieving categories',
-            details: error.message
+            message: error.message
         });
     }
 }

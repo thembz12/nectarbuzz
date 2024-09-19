@@ -146,13 +146,13 @@ exports.FarmerSingUpValidator = async (req, res, next) => {
         "string.empty": "Password cannot be empty",
       }),
     
-    address:joiValidation.string().trim().required()
-    .messages({
-      "any.required": "please provide address",
-      "string.empty": "address cannot be empty",
-      "string.min": "the minium name must be at least 3 character long",
-      "string.pattern.base": "firstName should only contain letters",
-    }),
+    //address:joiValidation.string().trim().required()
+    // .messages({
+    //   "any.required": "please provide address",
+    //   "string.empty": "address cannot be empty",
+    //   "string.min": "the minium name must be at least 3 character long",
+    //   "string.pattern.base": "firstName should only contain letters",
+    // }),
     sex:joiValidation.string().trim().required().valid("male","female").messages({
       "any.only": "Sex must be either 'male' or 'female'.",
       "string.empty": "Sex is required.",

@@ -36,15 +36,15 @@ router.get(`/getall/`,authorize, getAll)
 
 //router.get(`/checkout`, authenticate, createOrder)
 
-router.get("/getallorders/", getAllOrders)
+//router.get("/getallorders/", getAllOrders)
 
 router.post(`/make-admin/:userID`,authorize, isAdmin, makeAdmin)
 
 router.delete(`/delete-user/:userID`, isAdmin, deleteUser)
 
- router.delete(`/delete-farmer/:userID`, isAdmin, deleteFarmer)
+router.delete(`/delete-farmer/:userID`, isAdmin, deleteFarmer)
 
- router.post(`/log-out`, logOut)
+router.post(`/log-out`, logOut)
 
 
- module.exports = router
+module.exports = router

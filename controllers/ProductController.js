@@ -78,7 +78,9 @@ const createProduct = async (req,res)=>{
             try {
              const product = await ProductModel.find()
              if(product.length <= 0 ){
-                return res.status(404).json(`No available products`)
+                return res.status(404).json({
+                    message:`No available products`
+                })
 
              }else{
                 res.status(200).json({message:`All product ${product.length} `, data: product})
@@ -140,7 +142,9 @@ const createProduct = async (req,res)=>{
                 const {productID} = req.params
                 const WhatToApprove = await ProductModel.findById(productID)
                 if(!WhatToApprove){
-                    return res.status(404).json(`User with ID ${productID} was not found`)
+                    return res.status(404).json({
+                        message:`User with ID ${productID} was not found`
+                    })
                 }
                 WhatToApprove.productStatus = "approved"
                 if(WhatToApprove.productStatus === "approved"){
@@ -176,7 +180,9 @@ const createProduct = async (req,res)=>{
                         const {userID} = req.params
                          const user = await ProductModel.findById(userID)
                          if(!user){
-                         return res.status(404).json(`User not found.`)}
+                         return res.status(404).json({
+                            message:`User not found.`
+                         })}
                     
                         const productDelete = await ProductModel.findByIdAndDelete(productID)
                         res.status(200).json({

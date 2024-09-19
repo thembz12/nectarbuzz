@@ -119,7 +119,7 @@ const verifyEmail = async (req, res) => {
             return res.json({ message: "Link expired." });
         }
         res.status(500).json({
-            message: error.message,
+            message: error.message
         });
     }
 };
@@ -228,7 +228,7 @@ const forgotPassword = async (req, res) => {
         });
         const resetLink = `${req.protocol}://${req.get(
             "host"
-        )}/api/v1/user/reset-password/${resetToken}`;
+        )}/api/v1/farmer-reset-password/${resetToken}`;
 
         // Send reset password email
         const mailOptions = {

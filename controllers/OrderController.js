@@ -1,24 +1,25 @@
-const OrderModel = require('../models/OrderModel');
-const CartModel = require('../models/CartModel');
-const ProductModel = require('../models/ProductModel');
-const UserModel = require ("../models/UserModel");
-const { orderMailTemplate, restaurantOrderMailTemplate } = require('../helpers/html');
+// const OrderModel = require('../models/OrderModel');
+// const CartModel = require('../models/CartModel');
+// const ProductModel = require('../models/ProductModel');
+// const UserModel = require ("../models/UserModel");
+// const { orderMailTemplate, restaurantOrderMailTemplate } = require('../helpers/html');
 
 
 
-const formatter = new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 2
-  });
+// const formatter = new Intl.NumberFormat('en-NG', {
+//     style: 'currency',
+//     currency: 'NGN',
+//     minimumFractionDigits: 2
+//   });
 
 
     
 //          // Create order function
-//         async function createOrder(userId) {
+//         async function createOrder(userID) {
+            
 //           try {
 //             // 1. Get the user's cart
-//             const cart = await CartModel.findOne({ user: userId, isCheckedOut: false }).populate('items.product');
+//             const cart = await CartModel.findOne({ user: userID, isCheckedOut: false }).populate('items.product');
 //             if (!cart || cart.items.length === 0) {
 //               throw new Error('Cart is empty. Please add items to the cart.');
 //             }
@@ -27,14 +28,15 @@ const formatter = new Intl.NumberFormat('en-NG', {
 //             const totalPrice = cart.calculateTotalPrice();
         
 //             // 3. Fetch the user details
-//             const user = await UserModel.findById(userId);
+//             const user = await UserModel.findById(userID);
 //             if (!user) {
 //               throw new Error('User not found.');
 //             }
         
 //             // 4. Create the order from the cart
-//             const formattedCart = {
-//               user: userId,
+//             const formattedOrder = {
+//                 data : {
+//               user: userID,
 //               items: cart.items.map(item => ({
 //                 product: item.product._id,
 //                 honeyName: item.honeyName,
@@ -42,7 +44,7 @@ const formatter = new Intl.NumberFormat('en-NG', {
 //                 price: formatter.format(item.price),
 //                 productPicture: item.productPicture
 //               })),
-//               totalAmount: totalPrice,
+//               totalAmount:  formatter.format.totalPrice,
 //               customerFirstName: user.firstName,
 //               customerLastName: user.lastName,
 //               customerAddress: user.address,
@@ -50,7 +52,7 @@ const formatter = new Intl.NumberFormat('en-NG', {
 //               city: 'Lagos', // Assuming city and country are predefined
 //               country: 'Nigeria',
 //               orderStatus: 'Processing'
-//             };
+//             }};
 //             const order = new OrderModel(orderData);
 //             await order.save();
         
@@ -91,7 +93,7 @@ const formatter = new Intl.NumberFormat('en-NG', {
 //         }
         
 //         // Sample usage
-//         createOrder('user-id')  // Replace 'user-id' with an actual user ID from your database
+//         createOrder(userID)  // Replace 'user-id' with an actual user ID from your database
 //           .then(response => {
 //             if (response.success) {
 //               console.log('Order created successfully:', response.order);
@@ -115,58 +117,58 @@ const formatter = new Intl.NumberFormat('en-NG', {
 // };
 
 
-const getAllOrders = async (req, res) => {
-    try {
-        const userId = req.user ? req.user._id : null;
+// const getAllOrders = async (req, res) => {
+//     try {
+//         const userId = req.user ? req.user._id : null;
   
-        // Find the user from the database
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+//         // Find the user from the database
+//         const user = await UserModel.findById(userId);
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
   
-        // Find all orders for the user
-        const orders = await Order.find({ _id: { $in: user.orders } })
-            .sort({ orderDate: -1 })
-            .populate("items");
+//         // Find all orders for the user
+//         const orders = await Order.find({ _id: { $in: user.orders } })
+//             .sort({ orderDate: -1 })
+//             .populate("items");
         
-        // Check if orders are empty
-        if (orders.length === 0) {
-            return res.status(200).json({ message: 'No orders found for this user.' });
-        }
+//         // Check if orders are empty
+//         if (orders.length === 0) {
+//             return res.status(200).json({ message: 'No orders found for this user.' });
+//         }
   
-        // Return orders if they exist
-        res.status(200).json(orders);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
+//         // Return orders if they exist
+//         res.status(200).json(orders);
+//     } catch (error) {
+//         res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// };
 
-// Mark an order as paid
-exports.markAsPaid = async (req, res) => {
-    const orderID = req.params.orderID;
+// // Mark an order as paid
+// exports.markAsPaid = async (req, res) => {
+//     const orderID = req.params.orderID;
 
-    try {
-        const order = await OrderModel.findById(orderID);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
+//     try {
+//         const order = await OrderModel.findById(orderID);
+//         if (!order) {
+//             return res.status(404).json({ message: 'Order not found' });
+//         }
 
-        order.isPaid = true;
-        order.orderDate = Date.now();
+//         order.isPaid = true;
+//         order.orderDate = Date.now();
 
-        await order.save();
+//         await order.save();
 
-        res.status(200).json({ message: 'Order marked as paid', order });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+//         res.status(200).json({ message: 'Order marked as paid', order });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 
-module.exports = {
-    getAllOrders,
-    //createOrder
-}
+// module.exports = {
+//     getAllOrders,
+//     createOrder
+// }
