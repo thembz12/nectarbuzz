@@ -30,10 +30,10 @@ const createProduct = async (req,res)=>{
         })}
 
         const product = await ProductModel.findById(productID);
-        if (product.productStatus = "pending") {
-          return res.status(401).json({
-            message: "product is not approved yet",
-          })}
+        // if (product.productStatus = "pending") {
+        //   return res.status(401).json({
+        //     message: "product is not approved yet",
+        //   })}
 
 
 

@@ -18,8 +18,7 @@ const userSchema = new mongoose.Schema(
       type:String,
       require:true,
       unique:true,
-      trim:true,
-    },
+  },
     address:{type:String,set: (entry) => {
       const capitalize =
       entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();

@@ -36,7 +36,7 @@ router.get(`/getall/`,authorize, getAll)
 
 //router.get(`/checkout`, authenticate, createOrder)
 
-//router.get("/getallorders/", getAllOrders)
+router.get("/getallorders/", getAllOrders)
 
 router.post(`/make-admin/:userID`,authorize, isAdmin, makeAdmin)
 

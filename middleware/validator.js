@@ -65,7 +65,8 @@ exports.singUpVlidator = async (req, res, next) => {
           "string.empty": "Sex is required.",
           "any.required": "Sex is required."
         }),
-        phoneNumber:joiValidation.string().trim().regex(/^\d{11}$/).messages({
+        phoneNumber:joiValidation.string().trim().regex(/^\d{11}$/)
+        .messages({
           "any.required": "please provide phone number",
           "string.empty": "phone number cannot be empty",
           "string.min": "the minium name must be at least 3 character long",
