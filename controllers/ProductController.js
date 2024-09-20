@@ -140,19 +140,20 @@ const createProduct = async (req,res)=>{
         
         const approvedProduct = async(req, res)=> {
             try {
-                const {productID} = req.params
+                const productID = req.params.productID
                 const WhatToApprove = await ProductModel.findById(productID)
                 if(!WhatToApprove){
                     return res.status(404).json({
-                        message:`User with ID ${productID} was not found`
+                        message:`Product with ID was not found`
                     })
                 }
                 WhatToApprove.productStatus = "approved"
-                if(WhatToApprove.productStatus === "approved"){
-                    return res.status(404).json({
-                        message:"post has already been approved."
-                    })
-                }
+                // if(WhatToApprove.productStatus = "approved"){
+                //     return res.status(404).json({
+                //         message:"post has already been approved."
+                //     })
+                // }else{
+            
                 await WhatToApprove.save()
                 res.status(200).json({message: `your ${WhatToApprove.productID}, is now an approved`, data: WhatToApprove})
             } catch (error) {
