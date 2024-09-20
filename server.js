@@ -3,7 +3,7 @@ require ("./config/databaseConfig.js")
 const ProductRouter = require ("./routers/ProductRouter.js")
 const router = require ("./routers/UserRouter.js")
 const FarmerRouter = require ("./routers/FarmerRouter.js")
-const CategoriesRouter = require ("./routers/CategoriesModel.js")
+//const CategoriesRouter = require ("./routers/CategoriesModel.js")
 const cartRouter = require ("./routers/CartRouter.js")
 
 const app = express()
@@ -15,7 +15,7 @@ app.use('/uploads', express.static('uploads'))
 app.use("/api/v1", router)
 app.use("/api/v1/",FarmerRouter)
 app.use("/api/v1",ProductRouter)
-app.use("/api/v1",CategoriesRouter)
+//app.use("/api/v1",CategoriesRouter)
 app.use("/api/v1",cartRouter)
 
 

@@ -13,7 +13,7 @@ const formatter = new Intl.NumberFormat('en-NG', {
   });
 
 
-  const confirmOrder = async (req, res) => {
+  const checkout = async (req, res) => {
     try {
         const { customerFirstName, customerLastName, customerAddress, customerPhoneNumber, city, country } = req.body;
         const userId = req.user ? req.user._id : null;
@@ -245,5 +245,5 @@ exports.markAsPaid = async (req, res) => {
 
 module.exports = {
     getAllOrders,
-    confirmOrder
+    checkout
   }

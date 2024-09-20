@@ -1,6 +1,6 @@
 const { signUp, loginUser, verifyEmail, resendVerificationEmail, forgotPassword, changePassword, resetPassword, getOne, getAll, makeAdmin, deleteUser, logOut, updateUser, updatePicture, getOneFarmer, getAllFarmers, deleteFarmer} = require("../controllers/UserController")
 const { authorize, isAdmin, authenticate } = require("../middleware/authentication")
-const { getAllOrders, createOrder, confirmOrder} =  require ("../controllers/OrderController")
+const { getAllOrders, checkout} =  require ("../controllers/OrderController")
 const express = require(`express`)
 const upload = require("../utils/multer")
 const { singUpVlidator, logInValidator } = require("../middleware/validator")
@@ -34,7 +34,7 @@ router.get(`/getallfarmers/`,authorize, getAllFarmers)
 
 router.get(`/getall/`,authorize, getAll)
 
-router.get(`/checkout`, authenticate, confirmOrder)
+router.get(`/checkout`, authenticate, checkout)
 
 router.get("/getallorders/", getAllOrders)
 
