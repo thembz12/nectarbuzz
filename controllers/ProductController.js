@@ -11,7 +11,7 @@ const createProduct = async (req,res)=>{
         const categoryID = req.params.categoryID
         const FarmerID = req.params.farmerID
         const productID = req.params.productID
-        const {honeyName, description, price}= req.body
+        const {honeyName, description,weight, price}= req.body
         // if(!honeyName || !description || !price){
         //     return res.status(400).json({message:"enter all fields"})
         // }
@@ -52,6 +52,7 @@ const createProduct = async (req,res)=>{
             farmerID: farmerProduct.businessLicenseNo,
             description: description.trim(),
             price,
+            weight,
             category: req.params.categoryID,
             farmerProduct: req.params.farmerID,
             productPicture:photo.secure_url

@@ -13,158 +13,171 @@ const formatter = new Intl.NumberFormat('en-NG', {
   });
 
 
-//     // User to place an order
-// const createOrder = async (req, res) => {
-//     try {
-//       const { userId } = req.user;
-//       const { customerFirstName, customerLastName, customerAddress, customerPhoneNumber, city, country } = req.body;
-  
-//       // Find the user from the database
-//       const user = await UserModel.findById(userId);
-//       if (!user) {
-//         return res.status(404).json({ message: 'User not found' });
-//       }
-  
-//       // Find the user's cart
-//       const cart = await CartModel.findOne({ user: userId });
-//       if (!cart || cart.items.length === 0) {
-//         return res.status(404).json({ message: 'Cart not found or is empty' });
-//       }
-  
-//       // Extract the restaurant's ID from the cart and find the restaurant
-//       const productID = cart.product;
-//       const product = await ProductModel.findById(productID);
-  
-//       // Calculate the total amount based on the items in the cart
-//       let total = 0;
-//       let itemNames = []
-//       try {
-//         for (const cartItem of cart.items) {
-//           const menuItem = await menuModel.findById(cartItem.menu);
-//           if (!menuItem) {
-//             console.log(`Menu item not found for menu ID: ${cartItem.menu}`);
-//             continue; // Skip to the next iteration
-//           }
-//           // Get the names of each item
-//           itemNames.push(menuItem.name)
-  
-//           // Calculate the total price for the cart item based on the quantity and menu item price
-//           const itemTotal = cartItem.quantity * menuItem.price;
-//           total += itemTotal;
-  
-//           // Update the cart item's total price
-//           cartItem.itemTotal = itemTotal;
-//         }
-//       } catch (error) {
-//         // Handle any errors that occur during the loop
-//         console.error('An error occurred while processing cart items:', error);
-//         res.status(500).json({ message: 'Failed to process cart items' });
-//         return; // Stop further processing
-//       }
-  
-//       // Update the cart's total price
-//       cart.grandTotal = total
-//       await cart.save()
-  
-//       // Calculate cash back based on the total amount and the user's cashback toggle
-//       let cashBackToUse = 0;
-//       if (cashBack && user.cashBack === true) {
-//         if (user.cashBack >= total) {
-//           cashBackToUse = total
-//         } else {
-//           cashBackToUse = Math.min(user.cashBack, total);
-//         }
-//         // Return the user's cashBackToggle to false so as to make it optional for the next order
-//         user.cashBack = false;
-//       }
-  
-//       // Apply cash back to the current order
-//       const discountedTotal = total - cashBackToUse;
-  
-//       // Update the user's cashback by subtracting the cashBackToUse from the user's current cashback
-//       user.cashBack = user.cashBack - cashBackToUse;
-  
-//       // Calculate cash back amount for the next order
-//       let cashBackAmount = 0;
-//       try {
-//         if (discountedTotal >= 2000) {
-//           cashBackAmount = 60;
-//         }
-//       } catch (error) {
-//         console.error('An error occurred while calculating cash back amount:', error);
-//       }
-  
-//       // Add cashback amount to the existing cashback balance
-//       user.cashBack += cashBackAmount;
-  
-//       // Create the order and save it to the database
-//       const orderItems = cart.items.map((cartItem) => cartItem.menu);
-//       const userOrder = await orderModel.create({
-//         items: orderItems,
-//         total: discountedTotal,
-//         customerName: user.fullName,
-//         customerAddress,
-//         cashBackUsed: cashBackToUse,
-//         cashBackOnOrder: cashBackAmount,
-//       });
-  
-//       // Link the order to the user's 'orders' field and the restaunt's orders field
-//       user.orders.push(userOrder._id);
-//       restaurant.orders.push(userOrder._id);
-  
-//       // Clear the user's cart after placing the order
-//       cart.restaurant = null
-//       cart.items = [];
-//       cart.grandTotal = 0;
-//       cart.cashBack = user.cashBack;
-//       await cart.save();
-  
-//       // Save the user changes to the database
-//       await user.save();
-//       await restaurant.save();
-  
-//       const subject = "Order Confirmation";
-//       const html = await orderMailTemplate(user.fullName, userOrder._id, userOrder.orderDate, itemNames, userOrder.total);
-//       const mail = {
-//         email: user.email,
-//         subject,
-//         html,
-//       };
-//       sendEmail(mail);
-  
-//       const restSubject = "New Order Placed";
-//       const html1 = await restaurantOrderMailTemplate(user.fullName, user.email, customerAddress, userOrder._id, userOrder.orderDate, itemNames, userOrder.total);
-//       const restMail = {
-//         email: restaurant.email,
-//         subject: restSubject,
-//         html: html1,
-//       };
-//       sendEmail(restMail);
-  
-//       const response = {
-//         message: `Order successfully processed, Your cashback for this order is ${cashBackAmount}`,
-//         userOrder: {
-//           orderId: userOrder._id,
-//           items: itemNames,
-//           total: userOrder.total,
-//           customerName: userOrder.customerName,
-//           customerAddress: userOrder.customerAddress,
-//           cashBackUsed: userOrder.cashBackUsed,
-//           orderDate: userOrder.orderDate,
-//           cashBackOnOrder: userOrder.cashBackOnOrder,
-//           totalUserCashBack: user.cashBack,
-//         }
-//       };
-  
-//       res.status(201).json(response);
-  
-//     } catch (error) {
-//       res.status(500).json({
-//         message: 'Failed to create order',
-//         error: error.message
-//       });
-//     }
-//   };
+  const confirmOrder = async (req, res) => {
+    try {
+        const { customerFirstName, customerLastName, customerAddress, customerPhoneNumber, city, country } = req.body;
+        const userId = req.user ? req.user._id : null;
+
+        // Ensure the user is logged in
+        if (!userId) {
+            return res.status(400).json({ message: 'User is not authenticated' });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Find the cart for the logged-in user
+        const cart = await CartModel.findOne({ user: userId }).populate('items.product');
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).json({ message: "Your cart is empty" });
+        }
+
+        // Populate merchant information for each item in the cart
+        async function populateCartWithMerchantInfo(cart) {
+            const cartItems = cart.items;
+            for (let i = 0; i < cartItems.length; i++) {
+                const productId = cartItems[i].product;
+                const product = await ProductModel.findById(productId).populate('merchant');
+                if (!product) {
+                    return res.status(404).json({ message: "Product not found" });
+                }
+                cartItems[i].merchant = product.merchant;  // Attach the merchant to the cart item
+            }
+            cart.items = cartItems;
+            return cart;
+        }
+        await populateCartWithMerchantInfo(cart);
+
+        // Group products by merchants to avoid sending multiple emails to the same merchant
+        const merchantOrders = {};
+        cart.items.forEach(item => {
+            const merchantId = item.merchant._id;
+            if (!merchantOrders[merchantId]) {
+                merchantOrders[merchantId] = {
+                    merchant: item.merchant,
+                    items: [],
+                    total: 0
+                };
+            }
+            merchantOrders[merchantId].items.push(item);
+            merchantOrders[merchantId].total += item.quantity * item.price; // Calculate total for each merchant
+        });
+
+        // Calculate the total amount for the overall order (all products combined)
+        const productTotal = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        const deliveryCharge = 1050; // Fixed delivery charge
+        const totalAmount = productTotal + deliveryCharge;
+
+        // Create a new order
+        const newOrder = await Order.create({
+            user: userId,
+            items: cart.items,
+            totalAmount: totalAmount,
+            customerFirstName: customerFirstName,
+            customerLastName: customerLastName,
+            customerAddress: customerAddress,
+            customerPhoneNumber: customerPhoneNumber,
+            city: city,
+            country: country || 'Nigeria',
+            orderStatus: 'Processing',
+            paymentStatus: 'Paid'
+        });
+
+        // Link the order to the user
+        user.orders.push(newOrder._id);
+        await user.save();
+        
+        // Clear the user's cart after saving the order
+        cart.items = [];
+        cart.totalPrice = 0;
+        await cart.save();
+
+        // Prepare a list of additional users (admins, etc.) who will also receive order notifications
+        const additionalUsers = await userModel.find({ role: 'admin' }); // Example: Find all admins
+        const additionalEmails = additionalUsers.map(user => user.email);
+
+        // Send confirmation email to the buyer
+        await sendMail({
+            subject: "Order Confirmation",
+            email: user.email,
+            html: orderMailTemplate(user.fullName, newOrder._id, newOrder.orderDate, newOrder.items, totalAmount, deliveryCharge),
+        });
+
+        // // Send a separate email to each merchant with the price specific to their products
+        // for (const [merchantId, merchantOrder] of Object.entries(merchantOrders)) {
+        //     const merchant = merchantOrder.merchant;
+        //     const merchantItems = merchantOrder.items;
+        //     const merchantTotal = merchantOrder.total;
+
+        //     await sendMail({
+        //         subject: "New Order Received",
+        //         email: merchant.email,
+        //         html: newOrderNotificationTemplate(
+        //             merchant.businessName,
+        //             user.fullName,
+        //             user.phoneNumber,
+        //             customerAddress,
+        //             newOrder._id,
+        //             newOrder.orderDate,
+        //             merchantItems,
+        //             merchantTotal
+        //         ),
+        //     });
+
+        //     // Save order to the merchant's order list
+        //     merchant.orders.push(newOrder._id);
+        //     await merchant.save();
+        // }
+
+        // Send email notifications to the additional users (e.g., admins)
+        for (const email of additionalEmails) {
+            await sendMail({
+                subject: "New Order Notification",
+                email: email,
+                html: adminOrderNotificationTemplate(
+                    user.fullName,
+                    user.phoneNumber,
+                    customerAddress,
+                    newOrder._id,
+                    newOrder.orderDate,
+                    cart.items,
+                    totalAmount
+                ),
+            });
+        }
+
+        const cleanOrder = {
+            user: newOrder.user,
+            items: newOrder.items.map(item => ({
+                productName: item.productName,
+                quantity: item.quantity,
+                price: formatter.format(item.price),
+                productImage: item.productImage
+            })),
+            totalAmount: formatter.format(newOrder.totalAmount),
+            customerFirstName: newOrder.customerFirstName,
+            customerLastName: newOrder.customerLastName,
+            customerAddress: newOrder.customerAddress,
+            customerPhoneNumber: newOrder.customerPhoneNumber,
+            city: newOrder.city,
+            country: newOrder.country,
+            orderStatus: newOrder.orderStatus,
+            orderDate: newOrder.orderDate,
+            _id: newOrder._id
+        };
+
+        res.status(201).json({
+            message: "Order placed successfully",
+            order: cleanOrder
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 // Get all orders for the buyer
 exports.getMyOrders = async (req, res) => {
@@ -232,5 +245,5 @@ exports.markAsPaid = async (req, res) => {
 
 module.exports = {
     getAllOrders,
-    //createOrder
-}
+    confirmOrder
+  }
