@@ -111,9 +111,8 @@ const verifyEmail = async (req, res) => {
         // Save the user data
         await user.save();
         // Send a success response
-        res.status(200).json({
-            message: "User verified successfully",
-        });
+        res.res.redirect("https://nectar-buzz.vercel.app/#/login")
+        
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
             return res.json({ message: "Link expired." });

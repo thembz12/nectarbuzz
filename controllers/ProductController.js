@@ -23,11 +23,11 @@ const createProduct = async (req,res)=>{
             })
         }
 
-        const category = await categoryModel.findById(categoryID);
-      if (!category) {
-        return res.status(401).json({
-          message: "Category not found",
-        })}
+    //     const category = await categoryModel.findById(categoryID);
+    //   if (!category) {
+    //     return res.status(401).json({
+    //       message: "Category not found",
+    //     })}
 
         const product = await ProductModel.findById(productID);
         // if (product.productStatus = "pending") {
@@ -53,19 +53,19 @@ const createProduct = async (req,res)=>{
             description: description.trim(),
             price,
             weight,
-            category: req.params.categoryID,
+            //category: req.params.categoryID,
             farmerProduct: req.params.farmerID,
             productPicture:photo.secure_url
         })
         farmerProduct.product.push(Newproduct._id);
-        category.Products.push(Newproduct._id);
+        //category.Products.push(Newproduct._id);
         
        // const updatedUser = await ProductModel.findByIdAndUpdate(farmerProduct, { new: true });
         
 
         await farmerProduct.save()
         //await updatedUser.save()
-        await category.save()
+        //await category.save()
         res.status(201).json({
             message:"product posted successfully and waiting for approval",
             data:Newproduct
@@ -178,8 +178,8 @@ const createProduct = async (req,res)=>{
         
                 const deleteProduct = async (req,res)=>{
                     try {
-                        const {userID} = req.params
-                         const user = await ProductModel.findById(userID)
+                        const {productID} = req.params
+                         const user = await ProductModel.findById(productID)
                          if(!user){
                          return res.status(404).json({
                             message:`User not found.`

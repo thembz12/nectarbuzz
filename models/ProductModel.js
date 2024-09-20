@@ -27,11 +27,11 @@ const ProductSchema = new mongoose.Schema({
       ref: 'Farmers',
       required: true
     },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
-      required: true
-    },
+    // category: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Category',
+    //   required: true
+    // },
 })
 const ProductModel = mongoose.model("Products", ProductSchema)
 module.exports = ProductModel
