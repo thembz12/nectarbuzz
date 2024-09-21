@@ -8,9 +8,9 @@ router.post('/addtocart/',authenticate, addToCart)
 
 router.get('/viewcart',authenticate, viewCart)
 
-router.put('/reducecartitem', reduceItemQuantity)
+router.put('/reducecartitem', authenticate,reduceItemQuantity)
 
-router.put('/increasecartitem', increaseItemQuantity)
+router.put('/increasecartitem',authenticate, increaseItemQuantity)
 
 router.delete('/removecartitem',authenticate, removeItemFromCart)
 

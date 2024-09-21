@@ -116,14 +116,19 @@ const viewCart = async (req, res) => {
   };
 
   const increaseItemQuantity = async (req, res) => {
-    try {
-        const userId = req.user._id;
-        if (!userId) {
-            return res.status(400).json({ message: "User is not authenticated." });
-        }
+      try {
+        //   console.log(req.user)
+          const userId = req.user._id
+        //   console.log(userId)
+      
+		if (!userId) {
+			return res.status(400).json({ message: "User is not authenticated." });
+		}
+		
 
         const { productID, quantity } = req.body;
-        const qty = parseInt(quantity);
+        //const qty = parseInt(quantity);
+        const qty = Number(quantity)
         if (!qty || qty <= 0) {
             return res.status(400).json({ message: "Quantity must be a positive number." });
         }
@@ -142,22 +147,23 @@ const viewCart = async (req, res) => {
         cart.items[itemIndex].quantity += qty;
 
         // Recalculate the total price
-        cart.totalPrice = cart.items.reduce((acc, item) => acc + item.qty * item.price, 0);
-
-        await cart.save();
-
+        cart.totalPrice = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        console.log(typeof cart.totalPrice)
+        
         const formattedCart = {
             data: {
                 items: cart.items.map(item => ({
                     productID: item.product,
                     honeyName: item.honeyName,
                     quantity: item.quantity,
-                    price: formatter.format(item.price),
+                    price: Number(item.price),
                     productPicture: item.productPicture,
                 })),
-                totalPrice: formatter.format(cart.totalPrice),
+                totalPrice: cart.totalPrice,
             },
         };
+        console.log(formattedCart.data.totalPrice)
+        await cart.save();
 
         res.status(200).json({ message: "Item quantity increased successfully.", data: formattedCart });
     } catch (error) {
@@ -168,7 +174,7 @@ const viewCart = async (req, res) => {
 
 const reduceItemQuantity = async (req, res) => {
   try {
-      const userId = req.user._id;
+      const userId = req.user._id
       if (!userId) {
           return res.status(400).json({ message: "User is not authenticated." });
       }
