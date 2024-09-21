@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema(
         type: Boolean,
         default: false 
     },
+    profile:{type:String,
+      default:"User"
+    },
     profilePicture: {
       pictureUrl: { type: String},
     },

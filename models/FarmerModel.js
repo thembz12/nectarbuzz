@@ -39,6 +39,9 @@ const customerSchema = new mongoose.Schema({
       type:String,
       required:true
     },
+    profile:{type:String,
+      default:"Farmer"
+    },
     isVerified: {
       type: Boolean, 
       default: false 
