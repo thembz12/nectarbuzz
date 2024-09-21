@@ -14,7 +14,7 @@ router.put('/increasecartitem',authenticate, increaseItemQuantity)
 
 router.delete('/removecartitem',authenticate, removeItemFromCart)
 
-router.delete('/clearcart', clearCart)
+router.delete('/clearcart',authenticate, clearCart)
 
 
 
