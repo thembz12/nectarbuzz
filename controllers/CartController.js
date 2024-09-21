@@ -100,7 +100,6 @@ const viewCart = async (req, res) => {
       }
   
       const formattedCart = {
-        data: {
           items: cart.items.map(item => ({
             productID: item.product, // replace product with productId for clarity
             honeyName: item.honeyName,
@@ -109,7 +108,6 @@ const viewCart = async (req, res) => {
             productPicture: item.productPicture,
           })),
           totalPrice: formatter.format(cart.totalPrice),
-        },
       };
       res.status(200).json({ data: formattedCart });
     } catch (error) {
