@@ -111,7 +111,7 @@ const verifyEmail = async (req, res) => {
         // Save the user data
         await user.save();
         // Send a success response
-        res.res.redirect("https://nectar-buzz.vercel.app/#/login")
+        res.redirect("https://nectar-buzz.vercel.app/#/login")
         
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {

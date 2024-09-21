@@ -34,7 +34,7 @@ router.get(`/getallfarmers/`,authorize, getAllFarmers)
 
 router.get(`/getall/`,authorize, getAll)
 
-//router.get(`/checkout`, authenticate, checkout)
+//router.get(`/checkout/:userID`, authenticate, checkout)
 
 router.get("/getallorders/", getAllOrders)
 
