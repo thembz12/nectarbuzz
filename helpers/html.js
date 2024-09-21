@@ -56,7 +56,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           n<div class="header">
-           <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+           <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
             <h1>Welcome To NECTAR-BUZZ </h1>
           </div>
           <div class="content">
@@ -136,7 +136,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
             <h1>Welcome To NECTAR-BUZZ</h1>
           </div>
           <div class="content">
@@ -217,7 +217,7 @@ const signUpTemplate = (verifyLink, firstName) => {
     <body>
       <div class="container">
         <div class="header">
-        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
           <h1>Verify Your Account</h1>
         </div>
         <div class="content">
@@ -295,7 +295,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
             <h1>Reset Your Password</h1>
           </div>
           <div class="content">
@@ -374,7 +374,7 @@ const signUpTemplate = (verifyLink, firstName) => {
       <body>
         <div class="container">
           <div class="header">
-          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+          <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
             <h1>Reset Your Password</h1>
           </div>
           <div class="content">
@@ -453,7 +453,7 @@ function orderMailTemplate(firstName, orderId, orderDate, items, total) {
   <body>
     <div class="email-container">
       <div class="header">
-        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726482731/ihebw6qpm8pwqphsskcp.jpg" alt="Food Logo" class="logo">
+        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
         <h1>Order Confirmation</h1>
       </div>
       <div class="content">
@@ -540,7 +540,7 @@ function restaurantOrderMailTemplate(firstName, email, address, orderId, orderDa
   <body>
     <div class="email-container">
       <div class="header">
-        <img src="https://res.cloudinary.com/dpugols4b/image/upload/v1692122110/53FCB659-7D06-4CFD-BEDD-71C8A5FE2AC4-removebg-preview_ptap4b.png" alt="Food Logo" class="logo">
+        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
         <h1>New Order Received</h1>
       </div>
       <div class="content">

@@ -12,9 +12,6 @@ const ProductSchema = new mongoose.Schema({
     weight:{
       type:String
       },
-    description:{
-    type:String
-    },
     productStatus:{type:String,
        enum:["pending", "approved"],
        default: "pending",
