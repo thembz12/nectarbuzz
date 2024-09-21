@@ -225,7 +225,9 @@ const reduceItemQuantity = async (req, res) => {
 
 const removeItemFromCart = async (req, res) => {
 	try {
-		const userId = req.user._id;
+		const userId = req.user._id
+        // console.log(req.user)
+        // console.log(userId)
 		if (!userId) {
 			return res.status(400).json({ message: "User is not authenticated." });
 		}
@@ -264,6 +266,7 @@ const removeItemFromCart = async (req, res) => {
 
 const clearCart = async (req, res) => {
 	try {
+        log
 		const userId = req.user._id;
 		if (!userId) {
 			return res.status(400).json({ message: "User is not authenticated." });

@@ -6,13 +6,13 @@ const router = express.Router()
 
 router.post('/addtocart/',authenticate, addToCart)
 
-router.get('/viewcart/',authenticate, viewCart)
+router.get('/viewcart',authenticate, viewCart)
 
 router.put('/reducecartitem', reduceItemQuantity)
 
 router.put('/increasecartitem', increaseItemQuantity)
 
-router.delete('/removecartitem', removeItemFromCart)
+router.delete('/removecartitem',authenticate, removeItemFromCart)
 
 router.delete('/clearcart', clearCart)
 
