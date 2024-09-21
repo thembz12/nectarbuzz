@@ -54,11 +54,15 @@ const userSchema = new mongoose.Schema(
     profile:{type:String,
       default:"User"
     },
+    orders: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Order' 
+  }],
     profilePicture: {
       pictureUrl: { type: String},
     },
     cashBack: {
-      type: Number,
+      type: String,
     },
     blackList:[]
   },

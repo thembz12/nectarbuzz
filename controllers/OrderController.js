@@ -5,98 +5,200 @@ const UserModel = require ("../models/UserModel");
 const { orderMailTemplate, restaurantOrderMailTemplate } = require('../helpers/html');
 
 
-
 const checkout = async (req, res) => {
     try {
-        const {currentAddress} = req.body
-      const userId = req.user._id
-      if (!userId) {
-        return res.status(400).json({ message: "User is not authenticated." });
-    }
-    const cart = await CartModel.find({user:userId})
-    if(!cart){
-        return res.status(400).json({
-            message:"cart not found or cart is empty"
-        })}
+        const { currentAddress } = req.body;
+        const userId = req.user._id;
 
-    let totalAmount = 0
-    let itemNames = []
-
-    try {
-        for (const cartItem of cart.items) {
-          const product = await ProductModel.findById(cartItem.product);
-          if (!product) {
-            //console.log(`Menu item not found for menu ID: ${cartItem.product}`);
-            continue; 
-          }
-        itemNames.push(product.name)
-
-        const itemTotal = cartItem.quantity * product.price
-        totalAmount += itemTotal
-
-        cartItem.itemTotal = itemTotal
+        // Check if user is authenticated
+        if (!userId) {
+            return res.status(400).json({ message: "User is not authenticated." });
         }
+
+        // Find user's cart
+        const cart = await CartModel.findOne({ user: userId });
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).json({
+                message: "Cart not found or cart is empty"
+            });
+        }
+
+        // Initialize variables for total amount and item names
+        let totalAmount = 0;
+        let itemNames = [];
+
+        // Process cart items
+        try {
+            for (const cartItem of cart.items) {
+                const product = await ProductModel.findById(cartItem.product);
+                if (!product) {
+                    console.log(`Product not found for product ID: ${cartItem.product}`);
+                    continue; 
+                }
+                
+                itemNames.push(product.name);
+                const itemTotal = cartItem.quantity * product.price;
+                totalAmount += itemTotal;
+                cartItem.itemTotal = itemTotal; // Optionally store item total in the cart
+            }
+        } catch (error) {
+            console.error('An error occurred while processing cart items:', error);
+            return res.status(500).json({ message: 'Failed to process cart items' });
+        }
+
+        // Save updated cart
+        await cart.save();
+
+        // Calculate cashback based on total amount
+        let cashBackAmount = 0;
+        if (totalAmount >= 5000) {
+            cashBackAmount = 100;
+        }
+
+        // Retrieve user information
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.cashBack += cashBackAmount;
+
+        // Create a new order
+        const orderItems = cart.items.map((cartItem) => cartItem.product);
+        const userOrder = await OrderModel.create({
+            user: userId,
+            items: orderItems,
+            total: totalAmount,
+            customerFirstName: user.firstName,
+            customerLastName: user.lastName,
+            customerAddress: user.address,
+            currentAddress,
+            cashBack: cashBackAmount,
+        });
+
+        // Add order to user's orders
+        user.orders.push(userOrder._id);
+
+        // Clear cart
+        cart.items = [];
+        cart.totalAmount = 0;
+        cart.cashBack = user.cashBack;
+        await cart.save();
+
+        // Save updated user
+        await user.save();
+
+        // Response data
+        const response = {
+            message: `Order successfully processed. Your cashback for this order is ${cashBackAmount}.`,
+            userOrder: {
+                orderId: userOrder.user._id,
+                items: itemNames,
+                total: userOrder.total,
+                customerName: `${userOrder.customerFirstName} ${userOrder.customerLastName}`,
+                customerAddress: userOrder.currentAddress,
+                cashBack: userOrder.cashBack,
+                orderDate: userOrder.createdAt,
+            }
+        };
+
+        // Send response
+        res.status(201).json(response);
     } catch (error) {
-        // Handle any errors that occur during the loop
-        console.error('An error occurred while processing cart items:', error);
-        res.status(500).json({ message: 'Failed to process cart items' });
-        return; 
-      }
-      await cart.save()
-      let cashBackAmount = 0
-      try {
-        if (discountedTotal >= 5000) {
-          cashBackAmount = 100;
-        }
-      } catch (error) {
-        console.error('An error occurred while calculating cash back amount:', error);
-      }
+        console.error(error);
+        res.status(500).json({ message: "Error during checkout", error: error.message });
+    }
+}
+// const checkout = async (req, res) => {
+//     try {
+//         const {currentAddress} = req.body
+//       const userId = req.user._id
+//       if (!userId) {
+//         return res.status(400).json({ message: "User is not authenticated." });
+//     }
+//     const cart = await CartModel.find({user:userId})
+//     if(!cart){
+//         return res.status(400).json({
+//             message:"cart not found or cart is empty"
+//         })}
+
+//     let totalAmount = 0
+//     let itemNames = []
+
+//     try {
+//         for (const cartItem of cart.items) {
+//           const product = await ProductModel.findById(cartItem.product);
+//           if (!product) {
+//             //console.log(`Menu item not found for menu ID: ${cartItem.product}`);
+//             continue; 
+//           }
+//         itemNames.push(product.name)
+
+//         const itemTotal = cartItem.quantity * product.price
+//         totalAmount += itemTotal
+
+//         cartItem.itemTotal = itemTotal
+//         }
+//     } catch (error) {
+//         // Handle any errors that occur during the loop
+//         console.error('An error occurred while processing cart items:', error);
+//         res.status(500).json({ message: 'Failed to process cart items' });
+//         return; 
+//       }
+//       await cart.save()
+//       let cashBackAmount = 0
+//       try {
+//         if (discountedTotal >= 5000) {
+//           cashBackAmount = 100;
+//         }
+//       } catch (error) {
+//         console.error('An error occurred while calculating cash back amount:', error);
+//       }
   
-      user.cashBack += cashBackAmount;
+//       user.cashBack += cashBackAmount;
 
-      const orderItems = cart.items.map((cartItem) => cartItem.menu);
-      const userOrder = await OrderModel.create({
-        items: orderItems,
-        total: discountedTotal,
-        customerFirstName: user.firstName,
-        customerLastName:user.lastName,
-        customerAddress:user.address,
-        currentAddress,
-        cashBack: cashBackAmount,
-      });
-
-    
-    user.orders.push(userOrder._id);
-    
+//       const orderItems = cart.items.map((cartItem) => cartItem.menu);
+//       const userOrder = await OrderModel.create({
+//         items: orderItems,
+//         total: discountedTotal,
+//         customerFirstName: user.firstName,
+//         customerLastName:user.lastName,
+//         customerAddress:user.address,
+//         currentAddress,
+//         cashBack: cashBackAmount,
+//       });
 
     
-    cart.itemNames = [];
-    cart.totalAmount = 0;
-    cart.cashBack = user.cashBack;
-    await cart.save();
+//     user.orders.push(userOrder._id);
+    
 
-    // Save the user changes to the database
-    await user.save();
+    
+//     cart.itemNames = [];
+//     cart.totalAmount = 0;
+//     cart.cashBack = user.cashBack;
+//     await cart.save();
 
-    const response = {
-        message: `Order successfully processed, Your cashback for this order is ${cashBackAmount}`,
-        userOrder: {
-          orderId: userOrder._id,
-          items: itemNames,
-          total: userOrder.totalAmount,
-          customerName: userOrder.customerFirstName,
-          customerAddress: userOrder.currentAddress,
-          cashBack: userOrder.cashBack,
-          orderDate: userOrder.orderDate,
-          totalUserCashBack: user._id.cashBack,
-        }
-      };
-      res.status(201).json(response);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error during checkout", error: error.message });
-    }
-  }
+//     // Save the user changes to the database
+//     await user.save();
+
+//     const response = {
+//         message: `Order successfully processed, Your cashback for this order is ${cashBackAmount}`,
+//         userOrder: {
+//           orderId: userOrder._id,
+//           items: itemNames,
+//           total: userOrder.totalAmount,
+//           customerName: userOrder.customerFirstName,
+//           customerAddress: userOrder.currentAddress,
+//           cashBack: userOrder.cashBack,
+//           orderDate: userOrder.orderDate,
+//           totalUserCashBack: user._id.cashBack,
+//         }
+//       };
+//       res.status(201).json(response);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: "Error during checkout", error: error.message });
+//     }
+//   }
 
 
 // Get all orders for the buyer

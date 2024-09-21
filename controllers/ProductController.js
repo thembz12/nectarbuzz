@@ -8,7 +8,7 @@ const { newCategory } = require("./CategoriesController")
 const createProduct = async (req,res)=>{
     try { 
         //const categoryID = req.params.categoryID
-        const FarmerID = req.user.userId
+        const FarmerID = req.params.FarmerID
         //const productID = req.params.productID
         const {honeyName,quantity, price}= req.body
         // if(!honeyName || !description || !price){

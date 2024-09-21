@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-        required: true
+        
     },
 }],
   totalAmount: {
@@ -33,7 +33,7 @@ const OrderSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    required: true
+    
   },
   country: {
     type: String,

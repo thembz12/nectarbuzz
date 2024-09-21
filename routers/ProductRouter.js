@@ -6,7 +6,7 @@ const upload = require("../utils/multer")
 const router = express.Router()
 
 
-router.post("/product-post/", authenticate, upload.single('productPicture'),createProduct)
+router.post("/FarmerID:/product-post/", authenticate, upload.single('productPicture'),createProduct)
 
 router.get("/getone-product", getOne)
 
