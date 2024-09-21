@@ -12,22 +12,6 @@ const OrderSchema = new mongoose.Schema({
         ref: 'Product',
         required: true
     },
-    honeyName:{
-      type: String,
-      required: true
-    },
-    quantity: {
-        type: Number,
-        required: true,
-        default: 1
-    },
-    price:{
-        type: String,
-        required: true
-    },
-    productPicture:{
-        type: String
-    },
 }],
   totalAmount: {
       type: Number,
@@ -40,7 +24,7 @@ const OrderSchema = new mongoose.Schema({
       type: String,
       required: true
   },
-  customerAddress:{
+  currentAddress:{
     type: String,
     required: true
   },

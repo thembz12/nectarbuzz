@@ -1,6 +1,5 @@
 const ProductModel = require ("../models/ProductModel")
 const FarmerModel = require ("../models/FarmerModel")
-const categoryModel = require ("../models/CategoriesModel")
 const cloudinary = require ("cloudinary")
 const fs = require ("fs")
 const { newCategory } = require("./CategoriesController")
@@ -8,10 +7,10 @@ const { newCategory } = require("./CategoriesController")
 
 const createProduct = async (req,res)=>{
     try { 
-        const categoryID = req.params.categoryID
-        const FarmerID = req.params.farmerID
-        const productID = req.params.productID
-        const {honeyName,weight, price}= req.body
+        //const categoryID = req.params.categoryID
+        const FarmerID = req.user.userId
+        //const productID = req.params.productID
+        const {honeyName,quantity, price}= req.body
         // if(!honeyName || !description || !price){
         //     return res.status(400).json({message:"enter all fields"})
         // }
@@ -29,7 +28,7 @@ const createProduct = async (req,res)=>{
     //       message: "Category not found",
     //     })}
 
-        const product = await ProductModel.findById(productID);
+        // const product = await ProductModel.findById(productID);
         // if (product.productStatus = "pending") {
         //   return res.status(401).json({
         //     message: "product is not approved yet",
@@ -51,7 +50,7 @@ const createProduct = async (req,res)=>{
             farmerName: farmerProduct.firstName,
             farmerID: farmerProduct.businessLicenseNo,
             price,
-            weight,
+            quantity,
             //category: req.params.categoryID,
             farmerProduct: req.params.farmerID,
             productPicture:photo.secure_url
