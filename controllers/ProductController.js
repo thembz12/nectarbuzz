@@ -94,6 +94,27 @@ const createProduct = async (req,res)=>{
             }
         }
 
+        const getAllHamper = async(req,res)=>{
+            try {
+             const product = await ProductModel.find()
+             if(product.length <= 0 ){
+                return res.status(404).json({
+                    message:`No available hamper products`
+                })
+
+             }else{
+                res.status(200).json({message:`All hamper product ${product.length} `, data: product})
+             }
+        
+            } catch (error) {
+                res.status(500).json({
+                    status:"server error",
+                    Message:error.message
+                })
+                
+            }
+        }
+
         const getAllPendingPost = async (req, res) => {
             try {
                 
@@ -225,4 +246,4 @@ const createProduct = async (req,res)=>{
                         res.status(500).json({message:error.message})
                         }}
 
-module.exports = {createProduct, getOne, getAll, deleteProduct, updateProduct,approvedProduct,getAllApprovedPost, getAllPendingPost}
+module.exports = {createProduct, getOne, getAll, deleteProduct, getAllHamper,updateProduct,approvedProduct,getAllApprovedPost, getAllPendingPost}
