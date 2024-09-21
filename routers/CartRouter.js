@@ -12,7 +12,7 @@ router.put('/reducecartitem', reduceItemQuantity)
 
 router.put('/increasecartitem', increaseItemQuantity)
 
-router.post('/removecartitem', removeItemFromCart)
+router.delete('/removecartitem', removeItemFromCart)
 
 router.delete('/clearcart', clearCart)
 
