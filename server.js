@@ -4,6 +4,7 @@ const ProductRouter = require ("./routers/ProductRouter.js")
 const router = require ("./routers/UserRouter.js")
 const FarmerRouter = require ("./routers/FarmerRouter.js")
 //const CategoriesRouter = require ("./routers/CategoriesModel.js")
+const keepServerAlive = require ("./serverAlive.js")
 const cartRouter = require ("./routers/CartRouter.js")
 
 const app = express()
@@ -28,6 +29,9 @@ app.get("/", (req,res)=>{
         message:"WELCOME   TO NECTAR-BUZZ"
     })
 })
+
+app.use(keepServerAlive)
+
 
 const port = process.env.port || 1239
 
