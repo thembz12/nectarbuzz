@@ -180,6 +180,7 @@ const reduceItemQuantity = async (req, res) => {
       }
 
       const { productID, quantity } = req.body;
+      const qty = Number(quantity)
       if (!quantity || quantity <= 0) {
           return res.status(400).json({ message: "Quantity must be a positive number." });
       }
@@ -207,20 +208,19 @@ const reduceItemQuantity = async (req, res) => {
 
       await cart.save();
 
-      const formattedCart = {
-          data: {
+         const data = {
               items: cart.items.map(item => ({
                   productID: item.product,
                   honeyName: item.honeyName,
                   quantity: item.quantity,
-                  price: formatter.format(item.price),
+                  price: Number(item.price),
                   productPicture: item.productPicture,
               })),
-              totalPrice: formatter.format(cart.totalPrice),
-          },
-      };
+              totalPrice: cart.totalPrice,
+          }
+          await data.save()
 
-      res.status(200).json({ message: "Item quantity reduced successfully.", data: formattedCart });
+      res.status(200).json({ message: "Item quantity reduced successfully.", data });
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
@@ -249,8 +249,8 @@ const removeItemFromCart = async (req, res) => {
 		cart.totalPrice = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
 		await cart.save();
-        const formattedCart = {
-            data: {
+        
+           const data = {
               items: cart.items.map(item => ({
                 productID: item.product, // replace product with productId for clarity
                 honeyName: item.honeyName,
@@ -258,10 +258,10 @@ const removeItemFromCart = async (req, res) => {
                 price: formatter.format(item.price),
                 productPicture: item.productPicture,
               })),
-              totalPrice: formatter.format(cart.totalPrice),
-            },
-          };
-		res.status(200).json({ message: "Item removed from cart successfully.", data: formattedCart });
+              totalPrice: cart.totalPrice,
+            }
+        
+		res.status(200).json({ message: "Item removed from cart successfully.", data });
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
