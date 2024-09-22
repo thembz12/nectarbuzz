@@ -9,7 +9,7 @@ const router = express.Router()
 
 router.post(`/farmer-signup`,farmerSignUp)
 
-router.post(`/farmer-login`,FarmerlogInValidator, loginUser)
+router.post(`/farmer-login`, FarmerlogInValidator, loginUser)
 
 router.get(`/farmer-verify/:token`, verifyEmail)
 

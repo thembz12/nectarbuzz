@@ -49,11 +49,11 @@ const customerSchema = new mongoose.Schema({
 
   product:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Product"
+    ref:"Products"
   }],
   blackList:[]
 },{timestamps:true})
 
-const FarmerModel = mongoose.model(`Farmer`,customerSchema)
+const FarmerModel = mongoose.model(`Farmers`,customerSchema)
 
 module.exports = FarmerModel

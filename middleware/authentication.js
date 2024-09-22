@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const UserModel = require("../models/UserModel")
+const UserModel = require("../models/UserModel");
+const FarmerModel = require('../models/FarmerModel');
 //const FarmerModel = require("../models/FarmerModel")
 
 const authorize = async (req, res, next) => {
@@ -64,15 +65,16 @@ const authenticate = async (req, res, next) => {
 		}
 
 		const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-		const user = await UserModel.findById(decodedToken.userId);
-		if (!user) {
-			return res.status(404).json({ message: 'Authentication Failed: User not found' });
+  
+		const farmer = await FarmerModel.findById(decodedToken.userId);
+		if (!farmer) {
+			return res.status(404).json({ message: 'Authentication Failed: Farmer not found' });
 		}
     // Check if the token is blacklisted
-    if (user.blackList && user.blackList.includes(token)) {
+    if (farmer.blackList && farmer.blackList.includes(token)) {
       return res.status(401).json({ message: 'Token has been blacklisted. Please log in again.' });
   }
-		req.user = user; // Create a new user object and assign it to req.user
+		req.user = decodedToken; // Create a new farmer object and assign it to req.farmer
 		next();
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
@@ -88,7 +90,7 @@ const authenticate = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
     try {
-      if (!req.user.isAdmin) {
+      if (!req.farmer.isAdmin) {
         next();
       } else {
         res.status(403).json({ message: "Unauthorized: Not an admin" });

@@ -230,16 +230,16 @@ exports.FarmerlogInValidator = async (req, res, next) => {
     }),
     //userID:joiValidation.number().integer().required(),
     password: joiValidation
-      .string()
-      .required()
-      .min(8)
-      .max(50)
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
-      .messages({
-        "string.pattern.base":"incorrect password",
-        "string.empty": "Password cannot be empty",
-        "any.required": "please provide your password",
-      }),
+    .string()
+    .required()
+    .min(8)
+    .max(50)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    .messages({
+      "string.pattern.base":
+        "incorrect Password",
+      "string.empty": "Password cannot be empty",
+    }),
   });
   const { error } = Schema.validate(req.body);
   if (error) {

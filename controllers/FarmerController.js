@@ -144,7 +144,7 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const token = await jwt.sign(
+        const token = jwt.sign(
             {
                 userId: existingUser._id,
                 email: existingUser.email,
@@ -152,6 +152,7 @@ const loginUser = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
+		const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
         res.status(200).json({
             message: "Login successfully",
