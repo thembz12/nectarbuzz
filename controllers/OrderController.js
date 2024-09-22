@@ -49,11 +49,12 @@ const checkout = async (req, res) => {
         // Save updated cart
         await cart.save();
 
-        // Calculate cashback based on total amount
-        let cashBackAmount = 0;
-        if (totalAmount >= 5000) {
-            cashBackAmount = 100;
-        }
+         let cashBackAmount = 0;
+        if (totalAmount <= 5000) {
+         cashBackAmount = 15;
+            } else {
+         cashBackAmount = totalAmount * 0.002;
+         }
 
         // Retrieve user information
         const user = await UserModel.findById(userId);
@@ -71,9 +72,8 @@ const checkout = async (req, res) => {
             customerFirstName: user.firstName,
             customerLastName: user.lastName,
             customerAddress: user.address,
-            city,
-            currentAddress,
-            cashBackAmount: cashBack,
+            currentAddress, 
+            cashBack: cashBackAmount,
         });
 
         // Add order to user's orders
@@ -94,11 +94,13 @@ const checkout = async (req, res) => {
             userOrder: {
                 orderId: userOrder.user._id,
                 items: itemNames,
-                total: userOrder.total,
+                total: userOrder.totalAmount,
                 customerName: `${userOrder.customerFirstName} ${userOrder.customerLastName}`,
                 customerAddress: userOrder.currentAddress,
                 cashBack: userOrder.cashBack,
                 orderDate: userOrder.createdAt,
+                orderStatus:userOrder.orderStatus,
+                country:userOrder.country,
             }
         };
 

@@ -80,9 +80,6 @@ const authenticate = async (req, res, next) => {
 		if (error instanceof jwt.TokenExpiredError) {
 			return res.status(401).json({ message: 'Token has expired. Please log in again.' });
 		}
-    //  else if (error instanceof jwt.JsonWebTokenError) {
-		// 	return res.status(401).json({ message: "Oops! Access denied. Please sign in." });
-		// }
 		res.status(500).json({ message: error.message });
 	}
 };
@@ -127,24 +124,16 @@ const isAdmin = async (req, res, next) => {
       next();
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
-        return res.status(401).json({ message: 'Token has expired. Please log in again.' });
-      } else if (error instanceof jwt.JsonWebTokenError) {
-        return res.status(401).json({ message: "Oops! Access denied. Please sign in." });
+        return res.status(401).json({ message: 'Token has expired. Please log in again.' })}
+      // } else if (error instanceof jwt.JsonWebTokenError) {
+      //   return res.status(401).json({ message: "Oops! Access denied. Please sign in." });
+      // }
+      res.status(500).json({ message: error.message })}
       }
-      res.status(500).json({ message: error.message });
-    }
-  };
-  
-  
-  
- 
-  
-  
   
   
   module.exports = {
     authorize,
     isAdmin,
     authenticate,
-    authenticateUser
-  };
+    authenticateUser}

@@ -2,11 +2,11 @@ const CartModel = require('../models/CartModel');
 const ProductModel = require('../models/ProductModel'); 
 const mongoose = require ('mongoose')
 
-const formatter = new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 2
-  });
+// const formatter = new Intl.NumberFormat('en-NG', {
+//     style: 'currency',
+//     currency: 'NGN',
+//     minimumFractionDigits: 2
+//   });
 
 const addToCart = async (req, res) => {
     try {
@@ -63,22 +63,23 @@ const addToCart = async (req, res) => {
 
         // Save the cart back to the database
         await cart.save();
-        const formattedCart = {
-            data: {
+        
+
+          const data = {
               items: cart.items.map(item => ({
                 productId: item.product, // replace product with productId for clarity
                 productName: item.productName,
                 quantity: item.quantity,
-                price: formatter.format(item.price),
+                price: (item.price),
                 productPicture: item.productPicture,
               })),
-              totalPrice: formatter.format(cart.totalPrice),
-            },
-          };
+              totalPrice: (cart.totalPrice),
+            }
+        
 
         res.status(200).json({
             message: "Item added to cart successfully.",
-            data: formattedCart  // Send formatted prices
+            data  // Send formatted prices
         });
 
     } catch (error) {
@@ -99,17 +100,17 @@ const viewCart = async (req, res) => {
         return res.status(404).json({ message: "Cart not found." });
       }
   
-      const formattedCart = {
+      const data = {
           items: cart.items.map(item => ({
             productID: item.product, // replace product with productId for clarity
             honeyName: item.honeyName,
             quantity: item.quantity,
-            price: formatter.format(item.price),
+            price: (item.price),
             productPicture: item.productPicture,
           })),
-          totalPrice: formatter.format(cart.totalPrice),
+          totalPrice: (cart.totalPrice),
       };
-      res.status(200).json({ data: formattedCart });
+      res.status(200).json({ data  });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -150,8 +151,7 @@ const viewCart = async (req, res) => {
         cart.totalPrice = cart.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
         console.log(typeof cart.totalPrice)
         
-        const formattedCart = {
-            data: {
+         const  data = {
                 items: cart.items.map(item => ({
                     productID: item.product,
                     honeyName: item.honeyName,
@@ -160,12 +160,11 @@ const viewCart = async (req, res) => {
                     productPicture: item.productPicture,
                 })),
                 totalPrice: cart.totalPrice,
-            },
-        };
-        console.log(formattedCart.data.totalPrice)
+            }
+        console.log(data.totalPrice)
         await cart.save();
 
-        res.status(200).json({ message: "Item quantity increased successfully.", data: formattedCart });
+        res.status(200).json({ message: "Item quantity increased successfully.", data });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -218,7 +217,7 @@ const reduceItemQuantity = async (req, res) => {
               })),
               totalPrice: cart.totalPrice,
           }
-          await data.save()
+          await cart.save()
 
       res.status(200).json({ message: "Item quantity reduced successfully.", data });
   } catch (error) {
