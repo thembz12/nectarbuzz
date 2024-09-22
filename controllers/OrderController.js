@@ -67,12 +67,13 @@ const checkout = async (req, res) => {
         const userOrder = await OrderModel.create({
             user: userId,
             items: orderItems,
-            total: totalAmount,
+            totalAmount,
             customerFirstName: user.firstName,
             customerLastName: user.lastName,
             customerAddress: user.address,
+            city,
             currentAddress,
-            cashBack: cashBackAmount,
+            cashBackAmount: cashBack,
         });
 
         // Add order to user's orders

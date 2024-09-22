@@ -30,11 +30,11 @@ const authorize = async (req, res, next) => {
                 message: 'Authentication Failed: User not found'
             });
         }
-        // if(!user.isAdmin){
-        //     return res.status(403).json({
-        //         message:`Authentication failed: User is not allowed to access this route.`
-        //     })
-        // }
+        if(!user.isAdmin){
+            return res.status(403).json({
+                message:`Authentication failed: User is not allowed to access this route.`
+            })
+        }
 
         req.user = decodedToken;
 

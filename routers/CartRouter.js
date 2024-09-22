@@ -1,20 +1,20 @@
-const { authorize, authenticate } = require("../middleware/authentication")
+const { authorize, authenticate, authenticateUser } = require("../middleware/authentication")
 const { addToCart, clearCart,  reduceItemQuantity, increaseItemQuantity, removeItemFromCart, viewCart } = require("../controllers/CartController")
 const express = require ("express")
 
 const router = express.Router()
 
-router.post('/addtocart/',authenticate, addToCart)
+router.post('/addtocart/',authenticateUser, addToCart)
 
-router.get('/viewcart',authenticate, viewCart)
+router.get('/viewcart',authenticateUser, viewCart)
 
-router.put('/reducecartitem', authenticate,reduceItemQuantity)
+router.put('/reducecartitem', authenticateUser,reduceItemQuantity)
 
-router.put('/increasecartitem',authenticate, increaseItemQuantity)
+router.put('/increasecartitem',authenticateUser, increaseItemQuantity)
 
-router.delete('/removecartitem',authenticate, removeItemFromCart)
+router.delete('/removecartitem',authenticateUser, removeItemFromCart)
 
-router.delete('/clearcart',authenticate, clearCart)
+router.delete('/clearcart',authenticateUser, clearCart)
 
 
 
