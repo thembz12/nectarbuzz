@@ -2,7 +2,8 @@ const OrderModel = require('../models/OrderModel');
 const CartModel = require('../models/CartModel');
 const ProductModel = require('../models/ProductModel');
 const UserModel = require ("../models/UserModel");
-const { orderMailTemplate, restaurantOrderMailTemplate } = require('../helpers/html');
+const { orderMailTemplate, restaurantOrderMailTemplate, adminOrderMailTemplate } = require('../helpers/html');
+const sendMail = require('../helpers/email');
 
 
 const checkout = async (req, res) => {
@@ -15,9 +16,11 @@ const checkout = async (req, res) => {
             return res.status(400).json({ message: "User is not authenticated." });
         }
 
+        
+
         // Find user's cart
         const cart = await CartModel.findOne({ user: userId });
-        if (!cart || cart.items.length === 0) {
+        if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
             return res.status(400).json({
                 message: "Cart not found or cart is empty"
             });
@@ -55,6 +58,11 @@ const checkout = async (req, res) => {
             } else {
          cashBackAmount = totalAmount * 0.002;
          }
+         const qty = Number(cashBackAmount)
+          // Ensure valid quantity is provided
+          if (!qty || qty <= 0) {
+            return res.status(400).json({ message: "Quantity must be a positive number." });
+        }
 
         // Retrieve user information
         const user = await UserModel.findById(userId);
@@ -64,7 +72,7 @@ const checkout = async (req, res) => {
         user.cashBack += cashBackAmount;
 
         // Create a new order
-        const orderItems = cart.items.map((cartItem) => cartItem.product);
+        const orderItems = Array.isArray(cart.items) ? cart.items.map((cartItem) => cartItem.product) : [];
         const userOrder = await OrderModel.create({
             user: userId,
             items: orderItems,
@@ -73,7 +81,7 @@ const checkout = async (req, res) => {
             customerLastName: user.lastName,
             customerAddress: user.address,
             currentAddress, 
-            cashBack: cashBackAmount,
+            cashBack: Number(cashBackAmount),
         });
 
         // Add order to user's orders
@@ -87,12 +95,30 @@ const checkout = async (req, res) => {
 
         // Save updated user
         await user.save();
+        
+    const subject = "Order Confirmation";
+    const html = await orderMailTemplate(user.firstName, userOrder._id, userOrder.orderDate, itemNames, userOrder.totalAmount);
+    const mail = {
+      email: user.email,
+      subject,
+      html,
+    };
+    sendMail(mail);
+
+    const restSubject = "New Order Placed";
+    const html1 = await adminOrderMailTemplate(user.firstName, user.email, currentAddress, userOrder._id, userOrder.orderDate, itemNames, userOrder.total);
+    const adminMailOrder = {
+      email: user.email,
+      subject: restSubject,
+      html: html1,
+    };
+    sendMail(adminMailOrder);
 
         // Response data
         const response = {
             message: `Order successfully processed. Your cashback for this order is ${cashBackAmount}.`,
             userOrder: {
-                orderId: userOrder.user._id,
+                orderId: userOrder._id,
                 items: itemNames,
                 total: userOrder.totalAmount,
                 customerName: `${userOrder.customerFirstName} ${userOrder.customerLastName}`,

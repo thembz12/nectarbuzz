@@ -395,7 +395,8 @@ const signUpTemplate = (verifyLink, firstName) => {
   };
 
   
-function orderMailTemplate(firstName, orderId, orderDate, items, total) {
+function orderMailTemplate(firstName,lastName,cashBack, orderId, orderDate, items, total) {
+  const itemList = Array.isArray(items) ? items.map(item => `<li>${item}</li>`).join('') : '';
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -451,38 +452,38 @@ function orderMailTemplate(firstName, orderId, orderDate, items, total) {
     </style>
   </head>
   <body>
-    <div class="email-container">
-      <div class="header">
-        <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
-        <h1>Order Confirmation</h1>
-      </div>
-      <div class="content">
-        <p>Dear ${firstName},</p>
-        <p>Your order has been successfully placed!</p>
-        <div class="order-details">
-          <h2>Order Details:</h2>
-          <p><strong>Order ID:</strong> ${orderId}</p>
-          <p><strong>Date:</strong> ${orderDate}</p>
-          <p><strong>Items:</strong></p>
-          <ul>
-            ${items.map(item => `<li>${item}</li>`).join('')}
-          </ul>
-          <p><strong>Total Amount:</strong> &#8358; ${total}</p>
+        <div class="email-container">
+          <div class="header">
+            <img src="https://res.cloudinary.com/dpepylcw3/image/upload/v1726921647/zlzfrxqi41hkyiijpnwl.png" alt="Food Logo" class="logo">
+            <h1>Order Confirmation</h1>
+          </div>
+          <div class="content">
+            <p>Dear ${firstName},</p>
+            <p>Your order has been successfully placed!</p>
+            <div class="order-details">
+              <h2>Order Details:</h2>
+              <p><strong>Order ID:</strong> ${orderId}</p>
+              <p><strong>Date:</strong> ${orderDate}</p>
+              <p><strong>Items:</strong></p>
+              <ul>
+                ${itemList}
+              </ul>
+              <p><strong>Total Amount:</strong> &#8358; ${total}</p>
+            </div>
+            <p>Thank you for choosing us as your Honey plug!</p>
+          </div>
+          <div class="footer">
+            <p>If you have any questions, please contact us at nectarbuzz1@gmail.com.</p>
+          </div>
         </div>
-        <p>Thank you for choosing us for your meal!</p>
-      </div>
-      <div class="footer">
-        <p>If you have any questions, please contact us at nectarbuzz1@gmail.com.</p>
-      </div>
-    </div>
-  </body>
+      </body>
   </html>
   
   `;
 }
 
 
-function restaurantOrderMailTemplate(firstName, email, address, orderId, orderDate, items, total) {
+function adminOrderMailTemplate(firstName, email, address, orderId, orderDate, items, total) {
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -544,7 +545,7 @@ function restaurantOrderMailTemplate(firstName, email, address, orderId, orderDa
         <h1>New Order Received</h1>
       </div>
       <div class="content">
-        <p>Dear Restaurant Team,</p>
+        <p>Dear HoneyBuzz Team,</p>
         <p>A new order has been placed by ${firstName} (${email}).</p>
         <div class="order-details">
           <h2>Order Details:</h2>
@@ -572,5 +573,5 @@ function restaurantOrderMailTemplate(firstName, email, address, orderId, orderDa
 
 
   
-  module.exports = { signUpTemplate, verifyTemplate, forgotPasswordTemplate, changePasswordTemplate, orderMailTemplate, restaurantOrderMailTemplate, signUpFarmerTemplate};
+  module.exports = { signUpTemplate, verifyTemplate, forgotPasswordTemplate, changePasswordTemplate, orderMailTemplate, adminOrderMailTemplate, signUpFarmerTemplate};
   

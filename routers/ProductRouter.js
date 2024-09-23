@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post('/product-post/:farmerId', authenticate, upload.single('productPicture'),createProduct)
 
-router.post('/hamper-post/:farmerId', authenticate, upload.single('productPicture'),createHamperProduct)
+router.post('/hamrper-post/:farmerId', authenticate, upload.single('productPicture'),createHamperProduct)
 
 router.get("/getone-product", getOne)
 
