@@ -17,7 +17,6 @@ router.post(`/resend-verification`, resendVerificationEmail)
 
 router.put(`/update-user/:userID`, upload.single('profilePicture'), updateUser)
 
-
 router.post(`/forgot-password`, forgotPassword)
 
 router.post(`/change-password/:token`, changePassword)

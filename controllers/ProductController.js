@@ -58,39 +58,59 @@ const createProduct = async (req, res) => {
       res.status(500).json({message: error.message});
     }
   }; 
-// const createProduct = async (req, res) => {
-//   try {
-//     const { farmerId } = req.user;
-//     const { honeyName, quantity, price } = req.body;
 
-//     const farmer = await FarmerModel.findById(farmerId)
-
-//     const file = req.file.path;
-//     const photo = await cloudinary.uploader.upload(file);
-//     fs.unlink(file, (err) => {
-//       if (err) {
-//         console.log("unable to delete.", err);
-//       }
-//     });
-
-//     const newProduct = await ProductModel.create({
-//       honeyName,
-//       quantity,
-//       price,
-//       productPicture: photo.secure_url,
-//       farmers: farmerId
-//     });
+  const createHamperProduct = async (req, res) => {
+    try {
+      const { honeyName, price, quantity } = req.body;
+      const file = req.file;
+        console.log(file);
+        
+      if (!honeyName || !price || !quantity) {
+        return res.status(400).json({ message: "Please enter all fields." });
+      }
+  
+  
+      const { farmerId} = req.params;
+      console.log(farmerId)
+      if (!mongoose.Types.ObjectId.isValid(farmerId)) {
+          return res.status(400).json({ message: 'Invalid ID format.' });}
+      const farmerProduct = await FarmerModel.findById(farmerId);
+  
+      if (!farmerProduct) {
+        return res.status(401).json("farmer is currently offline.");
+      }
+  
+      const photo = await cloudinary.uploader.upload(file.path);
+      console.log(photo);
+      
+      fs.unlink(file.path, (err) => {
+        if (err) {
+          console.log("Failed to delete the file locally:", err);
+        }
+      });
+  
+      const newProduct = await ProductModel.create({
+        farmers: farmerId,
+        honeyName,
+        farmerName: farmerProduct.firstName,
+        quantity,
+        price,
+        productPicture: photo.secure_url,
     
-//     farmer.product.push(newProduct._id);
-
-//     res.status(201).json({
-//       message: "product posted successfully.",
-//       data: newProduct,
-//     });
-//   } catch (error) {
-//     res.status(500).json(error.message);
-//   }
-// };
+      });
+  
+      farmerProduct.product.push(newProduct._id);
+  
+      await farmerProduct.save();
+  
+      res.status(201).json({
+        message: "New Product created successfully.",
+        data: newProduct,
+      });
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  }; 
 
 const getAll = async (req, res) => {
   try {
@@ -279,4 +299,5 @@ module.exports = {
   approvedProduct,
   getAllApprovedPost,
   getAllPendingPost,
+  createHamperProduct,
 };

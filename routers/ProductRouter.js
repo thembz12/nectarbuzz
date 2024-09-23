@@ -1,5 +1,5 @@
 const express = require ("express")
-const { createProduct, getAll, getAllApprovedPost, getAllPendingPost, approvedProduct, getOne, deleteProduct, getAllHamper } = require("../controllers/ProductController")
+const { createProduct, getAll, getAllApprovedPost, getAllPendingPost, approvedProduct, getOne, deleteProduct, getAllHamper, createHamperProduct } = require("../controllers/ProductController")
 const { authorize, isAdmin, authenticate, authenticateUser } = require("../middleware/authentication")
 const upload = require("../utils/multer")
 
@@ -7,6 +7,8 @@ const router = express.Router()
 
 
 router.post('/product-post/:farmerId', authenticate, upload.single('productPicture'),createProduct)
+
+router.post('/hamper-post/:farmerId', authenticate, upload.single('productPicture'),createHamperProduct)
 
 router.get("/getone-product", getOne)
 
