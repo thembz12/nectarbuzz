@@ -113,7 +113,7 @@ const checkout = async (req, res) => {
             message: `Order successfully processed.`,
             userOrder: {
                 orderId: userOrder._id,
-                items: itemNames,
+                items: orderItems,
                 total: userOrder.totalAmount,
                 customerName: `${userOrder.customerFirstName} ${userOrder.customerLastName}`,
                 customerAddress: userOrder.currentAddress,
