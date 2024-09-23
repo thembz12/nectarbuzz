@@ -254,7 +254,7 @@ const removeItemFromCart = async (req, res) => {
                 productID: item.product, // replace product with productId for clarity
                 honeyName: item.honeyName,
                 quantity: item.quantity,
-                price: formatter.format(item.price),
+                price: Number(item.price),
                 productPicture: item.productPicture,
               })),
               totalPrice: cart.totalPrice,
