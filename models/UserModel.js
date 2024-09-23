@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema(
       pictureUrl: { type: String},
     },
     cashBack: {
-      type: String,
+      type: Number,
     },
     blackList:[]
   },
