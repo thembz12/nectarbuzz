@@ -16,8 +16,6 @@ const checkout = async (req, res) => {
             return res.status(400).json({ message: "User is not authenticated." });
         }
 
-        
-
         // Find user's cart
         const cart = await CartModel.findOne({ user: userId });
         if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
@@ -52,24 +50,19 @@ const checkout = async (req, res) => {
         // Save updated cart
         await cart.save();
 
-         let cashBackAmount = 0;
-        if (totalAmount <= 5000) {
-         cashBackAmount = 15;
-            } else {
-         cashBackAmount = totalAmount * 0.002;
-         }
-         const qty = Number(cashBackAmount)
-          // Ensure valid quantity is provided
-          if (!qty || qty <= 0) {
-            return res.status(400).json({ message: "Quantity must be a positive number." });
-        }
+        //  let cashBackAmount = 0;
+        // if (totalAmount <= 5000) {
+        //  cashBackAmount = 15;
+        //     } else {
+        //  cashBackAmount = totalAmount * 0.002;
+        //  }
 
         // Retrieve user information
         const user = await UserModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        user.cashBack += cashBackAmount;
+        //user.cashBack += cashBackAmount;
 
         // Create a new order
         const orderItems = Array.isArray(cart.items) ? cart.items.map((cartItem) => cartItem.product) : [];
@@ -81,7 +74,7 @@ const checkout = async (req, res) => {
             customerLastName: user.lastName,
             customerAddress: user.address,
             currentAddress, 
-            cashBack: Number(cashBackAmount),
+            //cashBack: cashBackAmount,
         });
 
         // Add order to user's orders
@@ -90,7 +83,7 @@ const checkout = async (req, res) => {
         // Clear cart
         cart.items = [];
         cart.totalAmount = 0;
-        cart.cashBack = user.cashBack;
+        //cart.cashBack = user.cashBack;
         await cart.save();
 
         // Save updated user
@@ -113,17 +106,18 @@ const checkout = async (req, res) => {
       html: html1,
     };
     sendMail(adminMailOrder);
+    //console.log({ cashBackAmount, userId, totalAmount, cart });
 
         // Response data
         const response = {
-            message: `Order successfully processed. Your cashback for this order is ${cashBackAmount}.`,
+            message: `Order successfully processed.`,
             userOrder: {
                 orderId: userOrder._id,
                 items: itemNames,
                 total: userOrder.totalAmount,
                 customerName: `${userOrder.customerFirstName} ${userOrder.customerLastName}`,
                 customerAddress: userOrder.currentAddress,
-                cashBack: userOrder.cashBack,
+                //cashBack: userOrder.cashBack,
                 orderDate: userOrder.createdAt,
                 orderStatus:userOrder.orderStatus,
                 country:userOrder.country,
