@@ -23,6 +23,7 @@ const checkout = async (req, res) => {
                 message: "Cart not found or cart is empty"
             });
         }
+        
 
         // Initialize variables for total amount and item names
         let totalAmount = 0;
@@ -90,7 +91,7 @@ const checkout = async (req, res) => {
         await user.save();
         
     const subject = "Order Confirmation";
-    const html = await orderMailTemplate(user.firstName, userOrder._id, userOrder.orderDate, itemNames, userOrder.totalAmount);
+    const html = await orderMailTemplate(user.firstName,user.lastName, userOrder._id,itemNames, userOrder.orderDate, itemNames, userOrder.totalAmount);
     const mail = {
       email: user.email,
       subject,
@@ -98,15 +99,19 @@ const checkout = async (req, res) => {
     };
     sendMail(mail);
 
-    const restSubject = "New Order Placed";
-    const html1 = await adminOrderMailTemplate(user.firstName, user.email, currentAddress, userOrder._id, userOrder.orderDate, itemNames, userOrder.total);
-    const adminMailOrder = {
-      email: user.email,
-      subject: restSubject,
-      html: html1,
-    };
-    sendMail(adminMailOrder);
-    //console.log({ cashBackAmount, userId, totalAmount, cart });
+      // Find admin users (isAdmin: true) in the database
+      const adminUsers = await UserModel.find({ isAdmin: true });
+      if (adminUsers && adminUsers.length > 0) {
+          // Loop through all admin users and send them an email
+          adminUsers.forEach(async (adminUser) => {
+              const adminMailOrder = {
+                  email: adminUser.email,
+                  subject: "New Order Placed",
+                  html: await adminOrderMailTemplate(user.firstName, user.email, currentAddress, userOrder._id, userOrder.orderDate, itemNames, userOrder.totalAmount),
+              };
+              sendMail(adminMailOrder);
+          });
+      }
 
         // Response data
         const response = {
