@@ -395,7 +395,7 @@ const signUpTemplate = (verifyLink, firstName) => {
   };
 
   
-function orderMailTemplate(firstName, orderItems, orderDate, items, totalAmount) {
+function orderMailTemplate(firstName, orderItems, orderDate, items, total) {
   const itemList = Array.isArray(items) ? items.map(item => `<li>${item}</li>`).join('') : '';
   return `
   <!DOCTYPE html>
@@ -468,7 +468,7 @@ function orderMailTemplate(firstName, orderItems, orderDate, items, totalAmount)
               <ul>
                 ${itemList}
               </ul>
-              <p><strong>Total Amount:</strong> &#8358; ${totalAmount}</p>
+              <p><strong>Total Amount:</strong> &#8358; ${total}</p>
             </div>
             <p>Thank you for choosing us as your Honey plug!</p>
           </div>
@@ -483,7 +483,7 @@ function orderMailTemplate(firstName, orderItems, orderDate, items, totalAmount)
 }
 
 
-function adminOrderMailTemplate(firstName, email, address, orderId, orderDate, items, totalAmount) {
+function adminOrderMailTemplate(firstName, email, address, orderId, orderDate, items,total) {
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -555,7 +555,7 @@ function adminOrderMailTemplate(firstName, email, address, orderId, orderDate, i
           <ul>
             ${items.map(item => `<li>${item}</li>`).join('')}
           </ul>
-          <p><strong>Total Amount:</strong> &#8358; ${totalAmount}</p>
+          <p><strong>Total Amount:</strong> &#8358; ${total}</p>
           <p><strong>Delivery Address:</strong> ${address}</p>
         </div>
         <p>Please prepare the order and contact the customer for delivery or pickup details.</p>

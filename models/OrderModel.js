@@ -35,6 +35,9 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     
   },
+  // cashBack:{type:String,
+  //   default:0
+  // },
   country: {
     type: String,
     default: 'Nigeria'

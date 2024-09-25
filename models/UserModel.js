@@ -63,6 +63,7 @@ const userSchema = new mongoose.Schema(
     },
     cashBack: {
       type: String,
+      default: 0
     },
     blackList:[]
   },

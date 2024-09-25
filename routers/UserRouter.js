@@ -37,7 +37,7 @@ router.post(`/checkout/`, authenticateUser, checkout)
 
 router.get("/getallorders/",authenticateUser, getAllOrders)
 
-router.post(`/make-admin/:userID`,authorize, isAdmin, makeAdmin)
+router.post(`/make-admin/:userID`,authorize, makeAdmin)
 
 router.delete(`/delete-user/:userID`, isAdmin, deleteUser)
 
