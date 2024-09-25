@@ -124,7 +124,7 @@ const isAdmin = async (req, res, next) => {
       next();
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
-        return res.status(401).json({ message: 'Token has expired. Please log in again.' })}
+        return res.status(401).json({ message: 'You been inactive for a while. Please log in again.' })}
       // } else if (error instanceof jwt.JsonWebTokenError) {
       //   return res.status(401).json({ message: "Oops! Access denied. Please sign in." });
       // }
